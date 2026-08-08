@@ -3,25 +3,439 @@
 @tailwind utilities;
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --primary: #f97316;
+  --primary-light: #fed7aa;
+  --primary-dark: #c2410c;
+  --secondary: #ef4444;
+  --secondary-light: #fca5a5;
+  --secondary-dark: #b91c1c;
+  --accent: #fbbf24;
+  --accent-light: #fde68a;
+  --bg-primary: #fff7ed;
+  --bg-secondary: #fef3c7;
+  --bg-card: #ffffff;
+  --text-primary: #431407;
+  --text-secondary: #78350f;
+  --success: #10b981;
+  --warning: #f59e0b;
+  --error: #ef4444;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+[data-theme="dark"] {
+  --bg-primary: #1c0a00;
+  --bg-secondary: #2d1200;
+  --bg-card: #3d1a00;
+  --text-primary: #fff7ed;
+  --text-secondary: #fed7aa;
+  --primary-light: #9a3412;
+}
+
+@layer base {
+  * {
+    border-color: rgba(254, 215, 170, 0.4);
+    scroll-margin-top: 80px;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+
+  body {
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    font-family: var(--font-jakarta), system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  ::selection {
+    background-color: rgba(249, 115, 22, 0.3);
+    color: var(--text-primary);
   }
 }
 
-body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+@layer components {
+  /* Solid card — no backdrop-blur (scroll killer) */
+  .card-surface {
+    background-color: var(--bg-card);
+    border: 1px solid rgba(249, 115, 22, 0.12);
+    box-shadow: 0 4px 16px -4px rgba(67, 20, 7, 0.08);
+  }
+
+  [data-theme="dark"] .card-surface {
+    border-color: rgba(254, 215, 170, 0.12);
+    box-shadow: 0 4px 16px -4px rgba(0, 0, 0, 0.35);
+  }
+
+  .section-pad {
+    @apply px-4 sm:px-6 lg:px-8;
+  }
+
+  .container-max {
+    @apply mx-auto w-full max-w-container;
+  }
+
+  .dropzone-active {
+    border-color: #f97316;
+    background-color: rgba(249, 115, 22, 0.05);
+  }
+
+  .skeleton {
+    border-radius: 0.75rem;
+    background-color: #ffedd5;
+    animation: pulse 1.5s ease-in-out infinite;
+  }
+
+  [data-theme="dark"] .skeleton {
+    background-color: rgba(67, 20, 7, 0.5);
+  }
+
+  .below-fold {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 500px;
+  }
+
+  .anim-fade-up {
+    animation: fade-up 0.45s ease-out both;
+  }
+
+  .anim-fade-in {
+    animation: fade-in 0.4s ease-out both;
+  }
 }
 
 @layer utilities {
   .text-balance {
     text-wrap: balance;
   }
+
+  .gpu {
+    transform: translateZ(0);
+    backface-visibility: hidden;
+  }
+
+  .scrollbar-hide,
+  .scrollbar-none {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .scrollbar-hide::-webkit-scrollbar,
+  .scrollbar-none::-webkit-scrollbar {
+    display: none;
+  }
 }
+
+/* Mobile-first responsive helpers */
+@media (max-width: 640px) {
+  .pdf-page-container {
+    max-width: 100%;
+  }
+
+  .element-toolbar {
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+
+  /* Prevents iOS zoom on focus */
+  input[type="text"],
+  input[type="number"],
+  input[type="search"],
+  input[type="email"],
+  input[type="password"],
+  textarea,
+  select {
+    font-size: 16px !important;
+  }
+}
+
+@media (max-width: 768px) {
+  /* Prefer comfortable tap targets without blowing up compact toolbars */
+  .tap-target {
+    min-height: 44px;
+    min-width: 44px;
+  }
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 12px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Bundled PDF editor fonts — full glyph coverage (not subsetted) */
+@font-face {
+  font-family: "PDF-Inter";
+  src: url("/fonts/Inter-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: block;
+}
+@font-face {
+  font-family: "PDF-Inter";
+  src: url("/fonts/Inter-Medium.woff2") format("woff2");
+  font-weight: 500;
+  font-style: normal;
+  font-display: block;
+}
+@font-face {
+  font-family: "PDF-Inter";
+  src: url("/fonts/Inter-SemiBold.woff2") format("woff2");
+  font-weight: 600;
+  font-style: normal;
+  font-display: block;
+}
+@font-face {
+  font-family: "PDF-Inter";
+  src: url("/fonts/Inter-Bold.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: block;
+}
+@font-face {
+  font-family: "PDF-Inter";
+  src: url("/fonts/Inter-Italic.woff2") format("woff2");
+  font-weight: 400;
+  font-style: italic;
+  font-display: block;
+}
+@font-face {
+  font-family: "PDF-Inter";
+  src: url("/fonts/Inter-BoldItalic.woff2") format("woff2");
+  font-weight: 700;
+  font-style: italic;
+  font-display: block;
+}
+@font-face {
+  font-family: "PDF-Nunito";
+  src: url("/fonts/Nunito-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: block;
+}
+@font-face {
+  font-family: "PDF-Nunito";
+  src: url("/fonts/Nunito-Bold.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: block;
+}
+@font-face {
+  font-family: "PDF-Helvetica";
+  src: local("Helvetica Neue"), local("Helvetica"), local("Arial");
+  font-weight: 400;
+  font-style: normal;
+  font-display: block;
+}
+@font-face {
+  font-family: "PDF-Helvetica";
+  src: local("Helvetica Neue Bold"), local("Helvetica Bold"), local("Arial Bold");
+  font-weight: 700;
+  font-style: normal;
+  font-display: block;
+}
+@font-face {
+  font-family: "PDF-SourceSerif";
+  src: url("/fonts/SourceSerif-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: block;
+}
+@font-face {
+  font-family: "PDF-SourceSerif";
+  src: url("/fonts/SourceSerif-Bold.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: block;
+}
+@font-face {
+  font-family: "PDF-LibreCaslon";
+  src: url("/fonts/LibreCaslon-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: block;
+}
+@font-face {
+  font-family: "PDF-LibreCaslon";
+  src: url("/fonts/LibreCaslon-Bold.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: block;
+}
+@font-face {
+  font-family: "PDF-JetBrainsMono";
+  src: url("/fonts/JetBrainsMono-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: block;
+}
+@font-face {
+  font-family: "PDF-JetBrainsMono";
+  src: url("/fonts/JetBrainsMono-Bold.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: block;
+}
+
+/* Kill underlines / focus chrome on PDF text editor overlays */
+.pdf-text-editor,
+.pdf-text-editor *,
+.pdf-text-replacement,
+.pdf-text-replacement * {
+  text-decoration: none !important;
+  text-decoration-line: none !important;
+  text-decoration-style: none !important;
+  text-underline-offset: 0 !important;
+  border-bottom: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+.pdf-text-editor::spelling-error,
+.pdf-text-editor::grammar-error {
+  text-decoration: none !important;
+}
+.pdf-text-patch {
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+/* Canvas ↔ HTML font rendering parity */
+.pdf-text-editor,
+.pdf-text-replacement {
+  -webkit-font-smoothing: antialiased !important;
+  -moz-osx-font-smoothing: grayscale !important;
+  text-rendering: optimizeLegibility !important;
+  font-synthesis: none !important;
+  font-feature-settings: "kern" 1, "liga" 1, "calt" 1;
+  font-variant-ligatures: normal;
+  font-kerning: normal;
+  letter-spacing: 0 !important;
+}
+
+.pdf-font-debug {
+  position: absolute;
+  z-index: 20;
+  pointer-events: none;
+  font-family: ui-monospace, monospace !important;
+  font-size: 9px !important;
+  font-weight: 600 !important;
+  line-height: 1.2 !important;
+  color: #b91c1c !important;
+  background: rgba(255, 255, 255, 0.92) !important;
+  border: 1px solid rgba(185, 28, 28, 0.5);
+  padding: 1px 4px;
+  white-space: nowrap;
+  letter-spacing: 0 !important;
+  text-decoration: none !important;
+}
+
+/* Hide editor chrome while raster-exporting (html2canvas) */
+.capture-mode [data-handle],
+.capture-mode .resize-handle,
+.capture-mode .rotate-handle,
+.capture-mode .pdf-font-debug {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+.capture-mode .editor-element {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+/* Strip browser spellcheck / link underlines from captured output */
+.capture-mode .pdf-page-container,
+.capture-mode .pdf-page-container * {
+  text-decoration: none !important;
+  text-decoration-line: none !important;
+  text-decoration-style: none !important;
+  text-underline-offset: 0 !important;
+  border-bottom: none !important;
+  -webkit-text-decoration: none !important;
+}
+
+.capture-mode .pdf-page-container a,
+.capture-mode .pdf-page-container a * {
+  text-decoration: none !important;
+  color: inherit !important;
+}
+
+.capture-mode *:focus,
+.capture-mode *:focus-visible,
+.capture-mode *:focus-within {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+.capture-mode .pdf-text-hitbox,
+.capture-mode .pdf-text-editor,
+.capture-mode [data-edit-editor],
+.capture-mode [data-capture-hide="true"] {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+}
+
+/* PDF editor page shell — explicit aspect ratio, no flex squish */
+.pdf-page-container {
+  flex-shrink: 0;
+  flex-grow: 0;
+  align-self: flex-start;
+  box-sizing: border-box;
+  overflow: visible !important;
+  contain: layout style;
+}
+
+.pdf-page-container .pdf-page-canvas,
+.pdf-page-container .pdf-page-overlay {
+  width: 100% !important;
+  height: 100% !important;
+  display: block;
+  user-select: none;
+}
+
+/* Crisp HiDPI PDF canvases — bitmap is supersampled; CSS size is logical */
+.pdf-page-canvas {
+  image-rendering: auto;
+  image-rendering: high-quality;
+  -ms-interpolation-mode: bicubic;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+.capture-mode .pdf-page-container {
+  transform: none !important;
+  transition: none !important;
+  animation: none !important;
+}
+
