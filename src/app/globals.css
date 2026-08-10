@@ -304,11 +304,12 @@
   font-display: block;
 }
 
-/* Kill underlines / focus chrome on PDF text editor overlays */
-.pdf-text-editor,
-.pdf-text-editor *,
-.pdf-text-replacement,
-.pdf-text-replacement * {
+/* Kill underlines / focus chrome on PDF text editor overlays —
+   EXCEPT link / underlined edits which must keep text-decoration */
+.pdf-text-editor:not(.is-underlined),
+.pdf-text-editor:not(.is-underlined) *,
+.pdf-text-replacement:not(.is-underlined),
+.pdf-text-replacement:not(.is-underlined) * {
   text-decoration: none !important;
   text-decoration-line: none !important;
   text-decoration-style: none !important;
@@ -316,6 +317,16 @@
   border-bottom: none !important;
   outline: none !important;
   box-shadow: none !important;
+}
+.pdf-text-editor.is-underlined,
+.pdf-text-editor.is-underlined * {
+  text-decoration: underline !important;
+  text-decoration-line: underline !important;
+  text-decoration-style: solid !important;
+  text-underline-offset: 15% !important;
+  outline: none !important;
+  box-shadow: none !important;
+  border-bottom: none !important;
 }
 .pdf-text-editor::spelling-error,
 .pdf-text-editor::grammar-error {

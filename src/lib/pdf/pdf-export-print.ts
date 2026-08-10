@@ -613,8 +613,12 @@ export async function exportPdfViaDirectDownload(
   }
 
   // Canvas pages are images — re-attach clickable link hotspots
-  const { applyLinkAnnotationsToPdf } = await import("@/lib/pdf/link-utils");
+  const {
+    applyLinkAnnotationsToPdf,
+    applyEditedTextLinkAnnotations,
+  } = await import("@/lib/pdf/link-utils");
   await applyLinkAnnotationsToPdf(outPdf, normalizedElements);
+  await applyEditedTextLinkAnnotations(outPdf, textItems);
 
   return outPdf.save({ useObjectStreams: true });
 }

@@ -12,6 +12,8 @@ import { ensureNormalized, remapElementGeometry } from "./coords";
 
 type Snapshot = {
   elements: EditorElement[];
+  /** Wall-clock time when this snapshot was taken (for unified undo with text history). */
+  savedAt: number;
 };
 
 type EditorStore = {
@@ -21,6 +23,8 @@ type EditorStore = {
   toolOptions: ToolOptions;
   past: Snapshot[];
   future: Snapshot[];
+  /** Bumps only on pushHistory (not undo/redo) so hosts can clear sibling redo stacks. */
+  historySeq: number;
   /** Pending image/signature to place on next click */
   pendingPlace: {
     type: "image" | "signature";
@@ -82,6 +86,7 @@ export const useEditorStore = create<EditorStore>((set, get) => ({
   toolOptions: { ...DEFAULT_TOOL_OPTIONS },
   past: [],
   future: [],
+  historySeq: 0,
   pendingPlace: null,
   pendingLink: null,
   layoutOpen: false,
@@ -104,10 +109,14 @@ export const useEditorStore = create<EditorStore>((set, get) => ({
   setSignatureOpen: (v) => set({ signatureOpen: v }),
 
   pushHistory: () => {
-    const { elements, past } = get();
+    const { elements, past, historySeq } = get();
     set({
-      past: [...past.slice(-(MAX_HISTORY - 1)), { elements: structuredClone(elements) }],
+      past: [
+        ...past.slice(-(MAX_HISTORY - 1)),
+        { elements: structuredClone(elements), savedAt: Date.now() },
+      ],
       future: [],
+      historySeq: historySeq + 1,
     });
   },
 
@@ -117,7 +126,10 @@ export const useEditorStore = create<EditorStore>((set, get) => ({
     const prev = past[past.length - 1];
     set({
       past: past.slice(0, -1),
-      future: [{ elements: structuredClone(elements) }, ...future],
+      future: [
+        { elements: structuredClone(elements), savedAt: Date.now() },
+        ...future,
+      ],
       elements: prev.elements,
       selectedElementId: null,
     });
@@ -129,7 +141,10 @@ export const useEditorStore = create<EditorStore>((set, get) => ({
     const next = future[0];
     set({
       future: future.slice(1),
-      past: [...past, { elements: structuredClone(elements) }],
+      past: [
+        ...past,
+        { elements: structuredClone(elements), savedAt: Date.now() },
+      ],
       elements: next.elements,
       selectedElementId: null,
     });

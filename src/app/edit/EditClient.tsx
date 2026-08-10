@@ -51,6 +51,7 @@ import { Input } from "@/components/ui/input";
 import { loadPdfDocument, renderPageToCanvas, getDisplayPixelRatio, type PdfDoc } from "@/lib/pdf/pdfjs";
 import {
   extractPageTextItems,
+  enrichTextFormattingFromCanvas,
   type EditableTextItem,
 } from "@/lib/pdf/text-extraction";
 import { matchFont } from "@/lib/pdf/font-matcher";
@@ -108,6 +109,7 @@ const SIZES = [6, 8, 9, 10, 11, 12, 14, 16, 18, 20, 24, 28, 32, 36, 48, 60, 72];
 type HistorySnap = {
   textItems: EditableTextItem[];
   strokes: Record<number, AnnotationStroke[]>;
+  savedAt: number;
 };
 
 export function EditClient() {
@@ -129,6 +131,9 @@ export function EditClient() {
   const setLayoutOpen = useEditorStore((s) => s.setLayoutOpen);
   const storeUndo = useEditorStore((s) => s.undo);
   const storeRedo = useEditorStore((s) => s.redo);
+  const storePast = useEditorStore((s) => s.past);
+  const storeFuture = useEditorStore((s) => s.future);
+  const historySeq = useEditorStore((s) => s.historySeq);
   const addExportTestRect = useEditorStore((s) => s.addExportTestRect);
   const normalizeAllElements = useEditorStore((s) => s.normalizeAll);
   const selectElement = useEditorStore((s) => s.selectElement);
@@ -141,6 +146,10 @@ export function EditClient() {
   const [strokes, setStrokes] = useState<Record<number, AnnotationStroke[]>>({});
   const [past, setPast] = useState<HistorySnap[]>([]);
   const [future, setFuture] = useState<HistorySnap[]>([]);
+  const pastRef = useRef(past);
+  pastRef.current = past;
+  const futureRef = useRef(future);
+  futureRef.current = future;
   const [processing, setProcessing] = useState(false);
   const [progress, setProgress] = useState(0);
   const [processingMsg, setProcessingMsg] = useState("Processing PDF…");
@@ -165,6 +174,10 @@ export function EditClient() {
   const pageRendersRef = useRef<Map<number, PageRender>>(new Map());
   const textItemsRef = useRef<EditableTextItem[]>([]);
   textItemsRef.current = textItems;
+  const strokesRef = useRef(strokes);
+  strokesRef.current = strokes;
+  const pageRef = useRef(page);
+  pageRef.current = page;
 
   const pdfCanvasRef = useRef<HTMLCanvasElement>(null);
   const overlayRef = useRef<HTMLCanvasElement>(null);
@@ -253,46 +266,108 @@ export function EditClient() {
   const showTextCtx = tool === "edit-text" || tool === "add-text" || Boolean(selectedItem);
 
   const pushHistory = useCallback(() => {
-    setPast((p) => [...p.slice(-40), { textItems, strokes }]);
+    const snap: HistorySnap = {
+      textItems: textItemsRef.current,
+      strokes: strokesRef.current,
+      savedAt: Date.now(),
+    };
+    pastRef.current = [...pastRef.current.slice(-40), snap];
+    futureRef.current = [];
+    setPast(pastRef.current);
     setFuture([]);
-  }, [textItems, strokes]);
+    // Drop overlay redo stack so unified redo stays consistent
+    useEditorStore.setState({ future: [] });
+  }, []);
 
-  const undo = useCallback(() => {
-    setPast((p) => {
-      if (!p.length) return p;
-      const prev = p[p.length - 1];
-      setFuture((f) => [{ textItems, strokes }, ...f]);
-      setTextItems(prev.textItems);
-      setStrokes(prev.strokes);
-      return p.slice(0, -1);
-    });
-  }, [textItems, strokes]);
+  // When overlays push a new history entry, drop text/stroke redo
+  const prevHistorySeq = useRef(historySeq);
+  useEffect(() => {
+    if (historySeq === prevHistorySeq.current) return;
+    prevHistorySeq.current = historySeq;
+    futureRef.current = [];
+    setFuture([]);
+  }, [historySeq]);
 
-  const redo = useCallback(() => {
-    setFuture((f) => {
-      if (!f.length) return f;
-      const next = f[0];
-      setPast((p) => [...p, { textItems, strokes }]);
-      setTextItems(next.textItems);
-      setStrokes(next.strokes);
-      return f.slice(1);
-    });
-  }, [textItems, strokes]);
+  const applyTextHistory = useCallback((snap: HistorySnap) => {
+    textItemsRef.current = snap.textItems;
+    strokesRef.current = snap.strokes;
+    setTextItems(snap.textItems);
+    setStrokes(snap.strokes);
+    const pageIndex = pageRef.current - 1;
+    const cache = { ...textCacheRef.current, [pageIndex]: snap.textItems };
+    textCacheRef.current = cache;
+    setTextCache(cache);
+    const pr = pageRendersRef.current.get(pageIndex);
+    const visible = pdfCanvasRef.current;
+    if (pr && visible) {
+      rebakePageEdits(pr, snap.textItems);
+      blitDisplayToVisible(pr, visible);
+    }
+  }, []);
+
+  const undoText = useCallback((): boolean => {
+    const p = pastRef.current;
+    if (!p.length) return false;
+    const taken = p[p.length - 1];
+    const current: HistorySnap = {
+      textItems: textItemsRef.current,
+      strokes: strokesRef.current,
+      savedAt: Date.now(),
+    };
+    pastRef.current = p.slice(0, -1);
+    futureRef.current = [current, ...futureRef.current];
+    setPast(pastRef.current);
+    setFuture(futureRef.current);
+    applyTextHistory(taken);
+    return true;
+  }, [applyTextHistory]);
+
+  const redoText = useCallback((): boolean => {
+    const f = futureRef.current;
+    if (!f.length) return false;
+    const taken = f[0];
+    const current: HistorySnap = {
+      textItems: textItemsRef.current,
+      strokes: strokesRef.current,
+      savedAt: Date.now(),
+    };
+    futureRef.current = f.slice(1);
+    pastRef.current = [...pastRef.current, current];
+    setPast(pastRef.current);
+    setFuture(futureRef.current);
+    applyTextHistory(taken);
+    return true;
+  }, [applyTextHistory]);
+
+  const undoAll = useCallback(() => {
+    const textPast = pastRef.current;
+    const elPast = useEditorStore.getState().past;
+    const textAt = textPast.length ? textPast[textPast.length - 1].savedAt : 0;
+    const elAt = elPast.length ? elPast[elPast.length - 1].savedAt : 0;
+    if (!textAt && !elAt) return;
+    if (elAt >= textAt) storeUndo();
+    else undoText();
+  }, [storeUndo, undoText]);
+
+  const redoAll = useCallback(() => {
+    const textFuture = futureRef.current;
+    const elFuture = useEditorStore.getState().future;
+    const textAt = textFuture.length ? textFuture[0].savedAt : 0;
+    const elAt = elFuture.length ? elFuture[0].savedAt : 0;
+    if (!textAt && !elAt) return;
+    if (elAt >= textAt) storeRedo();
+    else redoText();
+  }, [storeRedo, redoText]);
 
   useKeyboardShortcuts({
     enabled: Boolean(doc),
     setScale,
+    onUndoText: undoAll,
+    onRedoText: redoAll,
   });
 
-  const undoAll = useCallback(() => {
-    undo();
-    storeUndo();
-  }, [undo, storeUndo]);
-
-  const redoAll = useCallback(() => {
-    redo();
-    storeRedo();
-  }, [redo, storeRedo]);
+  const canUndo = past.length > 0 || storePast.length > 0;
+  const canRedo = future.length > 0 || storeFuture.length > 0;
 
   useEffect(() => {
     normalizeAllElements();
@@ -357,7 +432,11 @@ export function EditClient() {
                 isDeleted: hit.isDeleted,
                 patchColor: hit.patchColor,
                 backgroundColor: hit.backgroundColor || hit.patchColor,
-                color: hit.color,
+                // Prefer live toolbar color if user changed it; else extracted
+                color: hit.color || it.color,
+                isUnderline: it.isUnderline || !!hit.isUnderline,
+                isLink: it.isLink || !!hit.isLink,
+                linkUrl: it.linkUrl || hit.linkUrl,
                 fontFamily: it.fontFamily,
                 matchedWebFamily: it.matchedWebFamily,
                 embeddedFontName: hit.embeddedFontName || it.embeddedFontName,
@@ -550,10 +629,22 @@ export function EditClient() {
         }
         await ensurePageText(page - 1, doc);
         if (cancelled) return;
-        // Rebake after text items settle (restored edits)
+        // Refine colors/underlines from painted pixels (exact ink)
         const pr = pageRendersRef.current.get(page - 1);
         if (pr && visible) {
-          rebakePageEdits(pr, textItemsRef.current);
+          const enriched = enrichTextFormattingFromCanvas(
+            textItemsRef.current,
+            pr.originalCanvas,
+            page - 1
+          );
+          textItemsRef.current = enriched;
+          setTextItems(enriched);
+          const cache = { ...textCacheRef.current };
+          cache[page - 1] = enriched.filter((t) => t.pageIndex === page - 1);
+          textCacheRef.current = cache;
+          setTextCache(cache);
+
+          rebakePageEdits(pr, enriched);
           blitDisplayToVisible(pr, visible);
           // Preserve CSS size after blit (assigning canvas.width clears content only)
           visible.style.width = `${baseVp.width * scale}px`;
@@ -1131,7 +1222,7 @@ export function EditClient() {
             active={false}
             label="Undo"
             tip="Undo (Ctrl+Z)"
-            disabled={!past.length}
+            disabled={!canUndo}
             onClick={undoAll}
           >
             <Undo2 className="h-4 w-4" />
@@ -1139,8 +1230,8 @@ export function EditClient() {
           <ToolBtn
             active={false}
             label="Redo"
-            tip="Redo"
-            disabled={!future.length}
+            tip="Redo (Ctrl+Y)"
+            disabled={!canRedo}
             onClick={redoAll}
           >
             <Redo2 className="h-4 w-4" />

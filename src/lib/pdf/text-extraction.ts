@@ -1,6 +1,11 @@
 import type { PDFDocumentProxy, PDFPageProxy } from "pdfjs-dist";
 import { cleanFontName } from "./font-extractor";
 import { matchFont } from "./font-matcher";
+import {
+  sampleHasUnderlineFromCanvas,
+  sampleTextColorFromCanvas,
+} from "./canvas-color-sampler";
+import { looksLikeLinkBlue } from "./text-links";
 
 export type EditableTextItem = {
   id: string;
@@ -45,6 +50,13 @@ export type EditableTextItem = {
 
   /** Actual text fill color #rrggbb */
   color: string;
+
+  /** Text was underlined in the source (or is a typical hyperlink) */
+  isUnderline: boolean;
+  /** Text sits under a Link annotation */
+  isLink: boolean;
+  /** Destination URI when isLink */
+  linkUrl?: string;
 
   /** Sampled canvas background at commit — hides original glyphs */
   patchColor: string;
@@ -91,6 +103,9 @@ type RawGlyph = {
   ascent?: number;
   descent?: number;
   color: string;
+  isUnderline: boolean;
+  isLink: boolean;
+  linkUrl?: string;
   charSpacing: number;
   isRotated: boolean;
   left: number;
@@ -193,52 +208,9 @@ function rgbToHex(r: number, g: number, b: number): string {
   return `#${toHexByte(r)}${toHexByte(g)}${toHexByte(b)}`;
 }
 
-/**
- * Track fill color through the operator list and map each text-showing
- * op to a #rrggbb color (same order as getTextContent items).
- */
-export async function extractTextColors(
-  page: PDFPageProxy
-): Promise<Map<number, string>> {
-  const pdfjs = await import("pdfjs-dist");
-  const OPS = pdfjs.OPS;
-  const ops = await page.getOperatorList();
-  const colorMap = new Map<number, string>();
-
-  let currentFillColor = "#000000";
-  let textOpIndex = 0;
-
-  for (let i = 0; i < ops.fnArray.length; i++) {
-    const fn = ops.fnArray[i];
-    const args = (ops.argsArray[i] || []) as number[];
-
-    if (fn === OPS.setFillRGBColor && args.length >= 3) {
-      currentFillColor = rgbToHex(args[0] * 255, args[1] * 255, args[2] * 255);
-    } else if (fn === OPS.setFillGray && args.length >= 1) {
-      const gray = args[0] * 255;
-      currentFillColor = rgbToHex(gray, gray, gray);
-    } else if (fn === OPS.setFillCMYKColor && args.length >= 4) {
-      const [c, m, y, k] = args;
-      const r = 255 * (1 - c) * (1 - k);
-      const g = 255 * (1 - m) * (1 - k);
-      const b = 255 * (1 - y) * (1 - k);
-      currentFillColor = rgbToHex(r, g, b);
-    }
-
-    if (
-      fn === OPS.showText ||
-      fn === OPS.showSpacedText ||
-      fn === OPS.nextLineShowText ||
-      // pdfjs may expose this in some versions
-      (OPS as Record<string, number>).nextLineShowSpacedText === fn
-    ) {
-      colorMap.set(textOpIndex, currentFillColor);
-      textOpIndex++;
-    }
-  }
-
-  return colorMap;
-}
+/** Re-export robust operator-list color extractor */
+export { extractTextColors } from "./text-color-extractor";
+import { extractTextColors } from "./text-color-extractor";
 
 async function resolveFontMeta(
   page: PDFPageProxy,
@@ -321,6 +293,16 @@ function mergeLineItems(items: RawGlyph[]): RawGlyph[] {
         pdfWidth: cur.pdfWidth + next.pdfWidth + (space ? cur.pdfFontSize * 0.25 : 0),
         pdfHeight: Math.max(cur.pdfHeight, next.pdfHeight),
         pdfFontSize: Math.max(cur.pdfFontSize, next.pdfFontSize),
+        isUnderline: cur.isUnderline || next.isUnderline,
+        isLink: cur.isLink || next.isLink,
+        linkUrl: cur.linkUrl || next.linkUrl,
+        // Prefer non-black / link-aware color when merging
+        color:
+          cur.isLink || next.isLink
+            ? cur.color !== "#000000"
+              ? cur.color
+              : next.color
+            : cur.color,
       };
     } else {
       merged.push(cur);
@@ -339,6 +321,15 @@ export async function extractPageTextItems(
   const viewport = page.getViewport({ scale: 1 });
   const content = await page.getTextContent();
   const colorMap = await extractTextColors(page);
+  const pageLinks = await (
+    await import("./text-links")
+  ).extractPageLinks(page);
+  const {
+    findLinkForGlyph,
+    DEFAULT_LINK_COLOR,
+    isNearBlack,
+    looksLikeLinkBlue,
+  } = await import("./text-links");
   const styles = content.styles || {};
 
   const fontCache = new Map<
@@ -388,8 +379,18 @@ export async function extractPageTextItems(
     const matched = matchFont(embeddedFontName, flags);
     const family = `'${matched.webFamily}', -apple-system, BlinkMacSystemFont, sans-serif`;
 
-    const color = colorMap.get(textItemIndex) || "#000000";
+    let color = colorMap.get(textItemIndex) || "#000000";
     textItemIndex++;
+
+    const pdfWidth = Math.max(item.width || 0, pdfFontSize * 0.35);
+    const linkHit = findLinkForGlyph(e, f, pdfWidth, pdfFontSize, pageLinks);
+    const isLink = !!linkHit;
+    const linkUrl = linkHit?.url || undefined;
+    // Hyperlinks (and typical link blues) are underlined in source PDFs
+    const isUnderline = isLink || looksLikeLinkBlue(color);
+    if (isLink && isNearBlack(color)) {
+      color = DEFAULT_LINK_COLOR;
+    }
 
     const tx = transformMul(viewport.transform, item.transform);
     const fontHeight =
@@ -415,7 +416,6 @@ export async function extractPageTextItems(
       top = tx[5] - ascent * Math.cos(angle);
     }
 
-    const pdfWidth = Math.max(item.width || 0, pdfFontSize * 0.35);
     const screenWidth = Math.max((item.width || 0) * scaleX, fontHeight * 0.35);
 
     // Keep letter-spacing at 0 — CSS letter-spacing breaks kerning/ligatures
@@ -442,6 +442,9 @@ export async function extractPageTextItems(
       ascent: fontMeta?.ascent,
       descent: fontMeta?.descent,
       color,
+      isUnderline,
+      isLink,
+      linkUrl,
       charSpacing,
       isRotated,
       left,
@@ -487,6 +490,9 @@ export async function extractPageTextItems(
       ascent: item.ascent,
       descent: item.descent,
       color: item.color,
+      isUnderline: item.isUnderline,
+      isLink: item.isLink,
+      linkUrl: item.linkUrl,
       patchColor: "rgb(255,255,255)",
       backgroundColor: "rgb(255,255,255)",
       charSpacing: item.charSpacing,
@@ -669,4 +675,67 @@ export function mapFontFromName(fontName: string): {
   if (css.includes("Times")) family = "Times";
   else if (css.includes("Courier")) family = "Courier";
   return { family, bold: isBold, italic: isItalic };
+}
+
+/**
+ * Refine fill colors / underlines by sampling the rendered page canvas.
+ * Call after PDF.js paint so anti-aliased glyph pixels are available.
+ *
+ * Works with offscreen canvases (no clientWidth) by using bitmap coordinates
+ * from pageWidthPdf / canvas.width — critical for PageRender.originalCanvas.
+ */
+export function enrichTextFormattingFromCanvas(
+  items: EditableTextItem[],
+  canvas: HTMLCanvasElement,
+  pageIndex: number
+): EditableTextItem[] {
+  const sample = items.find((t) => t.pageIndex === pageIndex);
+  const pageWidth = sample?.pageWidthPdf;
+  const pageHeight = sample?.pageHeightPdf;
+  if (!pageWidth || !pageHeight || !canvas.width || !canvas.height) {
+    return items;
+  }
+
+  // Bitmap pixels per PDF point (handles HiDPI + offscreen clones)
+  const sx = canvas.width / pageWidth;
+  const sy = canvas.height / pageHeight;
+
+  return items.map((item) => {
+    if (item.pageIndex !== pageIndex || item.isRotated) return item;
+
+    const fontSize =
+      (item.originalPdfFontSize || item.pdfFontSize) * sy;
+    const pdfX = item.originalPdfX ?? item.pdfX;
+    const pdfY = item.originalPdfY ?? item.pdfY;
+    const pdfW = item.originalPdfWidth ?? item.pdfWidth;
+    // Rect already in bitmap pixels → cssToBitmap = 1
+    const box = {
+      left: pdfX * sx,
+      top: (item.pageHeightPdf - pdfY) * sy - fontSize,
+      width: Math.max(pdfW * sx, fontSize * 0.4),
+      height: fontSize,
+    };
+
+    let color = item.color || "#000000";
+    let isUnderline = !!item.isUnderline;
+
+    // Canvas ink is source of truth — operator list often reports black for gray text
+    const sampled = sampleTextColorFromCanvas(canvas, box, 1);
+    if (sampled) {
+      color = sampled;
+    }
+
+    if (!isUnderline) {
+      isUnderline =
+        sampleHasUnderlineFromCanvas(canvas, box, 1) ||
+        looksLikeLinkBlue(color) ||
+        !!item.isLink;
+    }
+
+    if (color === item.color && isUnderline === !!item.isUnderline) {
+      return item;
+    }
+
+    return { ...item, color, isUnderline };
+  });
 }

@@ -102,6 +102,7 @@ export function exactTextStyle(
   const match = resolveItemFontMatch(item);
   const box = pdfItemToCssBox(item, zoom);
   const family = `'${match.webFamily}', -apple-system, BlinkMacSystemFont, sans-serif`;
+  const underline = !!item.isUnderline;
 
   return {
     position: "absolute",
@@ -111,7 +112,7 @@ export function exactTextStyle(
     fontSize: box.fontSize,
     fontWeight: item.isBold ? 700 : 400,
     fontStyle: item.isItalic ? "italic" : "normal",
-    color: item.color,
+    color: item.color || "#000000",
     lineHeight: 1,
     letterSpacing: 0,
     whiteSpace: "pre",
@@ -131,7 +132,20 @@ export function exactTextStyle(
     height: box.height,
     width: "max-content",
     zIndex: 11,
-    ...NO_UNDERLINE,
+    ...(underline
+      ? {
+          textDecoration: "underline",
+          textDecorationLine: "underline",
+          textDecorationColor: item.color || "#0563C1",
+          textUnderlineOffset: "15%",
+          border: "none",
+          borderBottom: "none",
+          outline: "none",
+          outlineWidth: 0,
+          boxShadow: "none",
+          WebkitAppearance: "none",
+        }
+      : NO_UNDERLINE),
   };
 }
 

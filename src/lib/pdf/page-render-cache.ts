@@ -239,13 +239,26 @@ export function bakeTextEdit(
 
   if (!newText.trim()) return;
 
-  // 3) Draw text with matched bundled font
+  // 3) Draw text with matched bundled font + preserved color
   ctx.font = region.fontCss;
   ctx.fillStyle = item.color || "#000000";
   ctx.textBaseline = "alphabetic";
   ctx.textAlign = "left";
   ctx.imageSmoothingEnabled = true;
   ctx.fillText(newText, region.drawX, region.drawY);
+
+  // 4) Preserve underline (hyperlinks / decorated text)
+  if (item.isUnderline) {
+    const metrics = ctx.measureText(newText);
+    const underlineY = region.drawY + Math.max(2, region.fontPx * 0.14);
+    ctx.strokeStyle = item.color || "#0563C1";
+    ctx.lineWidth = Math.max(1.25, region.fontPx * 0.075);
+    ctx.lineCap = "butt";
+    ctx.beginPath();
+    ctx.moveTo(region.drawX, underlineY);
+    ctx.lineTo(region.drawX + Math.max(metrics.width, region.fontPx * 0.5), underlineY);
+    ctx.stroke();
+  }
 }
 
 /** Whiteout only (for live HTML editing over canvas) */

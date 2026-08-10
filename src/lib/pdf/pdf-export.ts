@@ -183,6 +183,49 @@ export async function applyEditedTextToPdf(
       }
 
       page.drawText(safeCurrent, opts);
+
+      if (item.isUnderline) {
+        const underlineY = oy - Math.max(0.8, pdfFontSize * 0.08);
+        page.drawLine({
+          start: { x: ox, y: underlineY },
+          end: { x: ox + Math.max(newW, 2), y: underlineY },
+          thickness: Math.max(0.6, pdfFontSize * 0.06),
+          color: rgb(fg.r / 255, fg.g / 255, fg.b / 255),
+        });
+      }
+
+      if (item.isLink && item.linkUrl) {
+        try {
+          const { PDFString } = await import("pdf-lib");
+          const { normalizeLinkUrl } = await import("./link-utils");
+          const url = normalizeLinkUrl(item.linkUrl);
+          if (url) {
+            const pad = 2;
+            const annot = page.doc.context.register(
+              page.doc.context.obj({
+                Type: "Annot",
+                Subtype: "Link",
+                Rect: [
+                  ox - pad,
+                  oy - 2,
+                  ox + Math.max(newW, coverW) + pad,
+                  oy + pdfFontSize + 2,
+                ],
+                Border: [0, 0, 0],
+                C: [0.02, 0.39, 0.76],
+                A: {
+                  Type: "Action",
+                  S: "URI",
+                  URI: PDFString.of(url),
+                },
+              })
+            );
+            page.node.addAnnot(annot);
+          }
+        } catch {
+          /* annotation optional */
+        }
+      }
     }
   }
 

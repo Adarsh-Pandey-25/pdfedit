@@ -53,8 +53,9 @@ export function useKeyboardShortcuts({
       const mod = e.ctrlKey || e.metaKey;
       if (mod && e.key.toLowerCase() === "z" && !e.shiftKey) {
         e.preventDefault();
-        undo();
-        onUndoText?.();
+        // Prefer host-provided undo (unified text + elements); else store-only.
+        if (onUndoText) onUndoText();
+        else undo();
         return;
       }
       if (
@@ -63,8 +64,8 @@ export function useKeyboardShortcuts({
           (e.key.toLowerCase() === "z" && e.shiftKey))
       ) {
         e.preventDefault();
-        redo();
-        onRedoText?.();
+        if (onRedoText) onRedoText();
+        else redo();
         return;
       }
       if (mod && e.key.toLowerCase() === "d" && selectedId) {

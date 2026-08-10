@@ -76,3 +76,58 @@ export async function applyLinkAnnotationsToPdf(
     }
   }
 }
+
+/**
+ * Re-attach URI link hotspots for Edit Text items that were hyperlinks.
+ * Used after Exact Match (image) export so edited link text stays clickable.
+ */
+export async function applyEditedTextLinkAnnotations(
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  doc: any,
+  textItems: import("./text-extraction").EditableTextItem[]
+): Promise<void> {
+  const { PDFString } = await import("pdf-lib");
+  const pages = doc.getPages();
+
+  for (const item of textItems) {
+    if (!item.isLink || !item.linkUrl || item.isDeleted) continue;
+    if (!(item.isEdited && item.currentText !== item.originalText)) continue;
+
+    const page = pages[item.pageIndex];
+    if (!page) continue;
+    const url = normalizeLinkUrl(item.linkUrl);
+    if (!url) continue;
+
+    const { height: pageH } = page.getSize();
+    const ox = item.pdfX;
+    const oy = item.pdfY;
+    const fontSize = item.pdfFontSize || item.fontSize || 12;
+    // Rough width from character count when pdfWidth is original-sized
+    const w = Math.max(
+      item.pdfWidth || 0,
+      (item.currentText?.length || 1) * fontSize * 0.5
+    );
+    const pad = 2;
+
+    try {
+      const annot = page.doc.context.register(
+        page.doc.context.obj({
+          Type: "Annot",
+          Subtype: "Link",
+          Rect: [ox - pad, oy - 2, ox + w + pad, oy + fontSize + 2],
+          Border: [0, 0, 0],
+          C: [0.02, 0.39, 0.76],
+          A: {
+            Type: "Action",
+            S: "URI",
+            URI: PDFString.of(url),
+          },
+        })
+      );
+      page.node.addAnnot(annot);
+      void pageH;
+    } catch {
+      /* optional */
+    }
+  }
+}

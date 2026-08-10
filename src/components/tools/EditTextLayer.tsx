@@ -12,6 +12,7 @@ import {
   samplePatchColor,
   type EditableTextItem,
 } from "@/lib/pdf/text-extraction";
+import { sampleTextColorFromCanvas } from "@/lib/pdf/canvas-color-sampler";
 import {
   canvasZoom,
   exactTextStyle,
@@ -46,6 +47,10 @@ type EditTextLayerProps = {
 type EditSession = {
   itemId: string;
   patchColor: string;
+  /** Sampled glyph ink — preserves gray/blue when operator list said black */
+  inkColor: string;
+  /** item.color when edit began (to detect toolbar color changes) */
+  colorAtStart: string;
   clickX: number;
   clickY: number;
   initialText: string;
@@ -146,9 +151,12 @@ export function EditTextLayer({
       return;
     }
 
+    const userChangedColor =
+      item.color !== sess.colorAtStart && item.color !== sess.inkColor;
     const committed: EditableTextItem = {
       ...item,
       currentText: newText,
+      color: userChangedColor ? item.color : sess.inkColor || item.color,
       patchColor: sess.patchColor,
       backgroundColor: sess.patchColor,
       isEdited: true,
@@ -207,17 +215,28 @@ export function EditTextLayer({
       const zoom = zoomFor(item);
       const box = pdfItemToCssBox(item, zoom);
       let patchColor = "rgb(255,255,255)";
+      let inkColor = item.color || "#000000";
       if (canvas) {
         try {
           patchColor = samplePatchColor(canvas, box);
         } catch {
           patchColor = "rgb(255,255,255)";
         }
+        try {
+          const dpr =
+            canvas.clientWidth > 0 ? canvas.width / canvas.clientWidth : 1;
+          const sampled = sampleTextColorFromCanvas(canvas, box, dpr);
+          if (sampled) inkColor = sampled;
+        } catch {
+          /* keep item.color */
+        }
       }
 
       const sess: EditSession = {
         itemId: item.id,
         patchColor,
+        inkColor,
+        colorAtStart: item.color || "#000000",
         clickX: e.clientX,
         clickY: e.clientY,
         initialText: item.currentText,
@@ -452,11 +471,24 @@ export function EditTextLayer({
             suppressContentEditableWarning
             spellCheck={false}
             {...{ autoCorrect: "off", autoCapitalize: "off" }}
-            className="pdf-text-editor"
+            className={
+              editingItem.isUnderline
+                ? "pdf-text-editor is-underlined"
+                : "pdf-text-editor"
+            }
             style={{
               ...exactTextStyle(editingItem, zoomFor(editingItem)),
               // Opaque bg while typing so canvas whiteout + HTML don't double-ghost
               background: session.patchColor,
+              // Keep original fill color while typing (e.g. gray labels / link blue)
+              color: session.inkColor || editingItem.color || "#000000",
+              ...(editingItem.isUnderline
+                ? {
+                    textDecoration: "underline",
+                    textDecorationColor:
+                      session.inkColor || editingItem.color || "#0563C1",
+                  }
+                : null),
             }}
             onInput={() => measureLiveWidth(editingItem)}
             onBlur={(e) => {
