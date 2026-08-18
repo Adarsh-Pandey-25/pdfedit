@@ -66,18 +66,21 @@ export function sampleTextColorFromCanvas(
     if (!buckets.size) return null;
 
     // Prefer frequent + dark clusters (true ink over anti-alias midtones)
-    let best: { count: number; lum: number; r: number; g: number; b: number } | null =
-      null;
+    let bestR = 0;
+    let bestG = 0;
+    let bestB = 0;
     let bestScore = -Infinity;
     buckets.forEach((v) => {
       const score = v.count * (1.35 - v.lum / 255);
       if (score > bestScore) {
         bestScore = score;
-        best = v;
+        bestR = v.r;
+        bestG = v.g;
+        bestB = v.b;
       }
     });
-    if (!best) return null;
-    return `#${toHex(best.r)}${toHex(best.g)}${toHex(best.b)}`;
+    if (bestScore === -Infinity) return null;
+    return `#${toHex(bestR)}${toHex(bestG)}${toHex(bestB)}`;
   } catch {
     return null;
   }

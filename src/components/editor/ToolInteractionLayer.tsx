@@ -184,7 +184,6 @@ export function ToolInteractionLayer({ pageIndex, pageEl, enabled }: Props) {
       addElement,
       pageIndex,
       setPendingPlace,
-      setPendingLink,
       setTool,
       setSignatureOpen,
       opts,

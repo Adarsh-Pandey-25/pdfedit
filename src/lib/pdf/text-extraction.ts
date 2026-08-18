@@ -198,16 +198,6 @@ export function detectStyle(
   };
 }
 
-function toHexByte(n: number): string {
-  return Math.max(0, Math.min(255, Math.round(n)))
-    .toString(16)
-    .padStart(2, "0");
-}
-
-function rgbToHex(r: number, g: number, b: number): string {
-  return `#${toHexByte(r)}${toHexByte(g)}${toHexByte(b)}`;
-}
-
 /** Re-export robust operator-list color extractor */
 export { extractTextColors } from "./text-color-extractor";
 import { extractTextColors } from "./text-color-extractor";
