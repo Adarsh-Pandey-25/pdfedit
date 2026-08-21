@@ -153,14 +153,16 @@ export function EditTextLayer({
 
     const userChangedColor =
       item.color !== sess.colorAtStart && item.color !== sess.inkColor;
+    const cleared = !newText.trim();
     const committed: EditableTextItem = {
       ...item,
-      currentText: newText,
+      currentText: cleared ? "" : newText,
       color: userChangedColor ? item.color : sess.inkColor || item.color,
       patchColor: sess.patchColor,
       backgroundColor: sess.patchColor,
       isEdited: true,
-      isDeleted: false,
+      // Clearing all text + Enter = delete (removes blue line fully)
+      isDeleted: cleared,
       originalPdfX: item.originalPdfX ?? item.pdfX,
       originalPdfY: item.originalPdfY ?? item.pdfY,
       originalPdfWidth: item.originalPdfWidth ?? item.pdfWidth,

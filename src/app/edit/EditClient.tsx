@@ -65,7 +65,6 @@ import {
   exportPdfViaPrint,
 } from "@/lib/pdf/pdf-export-print";
 import {
-  bakeTextEdit,
   blitDisplayToVisible,
   createPageRender,
   type PageRender,
@@ -708,11 +707,20 @@ export function EditClient() {
   const deleteSelected = useCallback(() => {
     if (!selectedTextId) return;
     pushHistory();
-    setTextItems((items) =>
-      items.map((t) =>
-        t.id === selectedTextId ? { ...t, isDeleted: true, isEdited: true } : t
-      )
-    );
+    const id = selectedTextId;
+    setTextItems((items) => {
+      const next = items.map((t) =>
+        t.id === id ? { ...t, isDeleted: true, isEdited: true } : t
+      );
+      textItemsRef.current = next;
+      const pr = pageRendersRef.current.get(pageRef.current - 1);
+      const visible = pdfCanvasRef.current;
+      if (pr && visible) {
+        rebakePageEdits(pr, next);
+        blitDisplayToVisible(pr, visible);
+      }
+      return next;
+    });
     setSelectedTextId(null);
   }, [selectedTextId, pushHistory]);
 
@@ -1607,14 +1615,23 @@ export function EditClient() {
                 const pr = pageRendersRef.current.get(page - 1);
                 const visible = pdfCanvasRef.current;
                 if (!pr || !visible) return;
-                whiteoutTextRegion(pr, { ...item, patchColor }, patchColor);
+                whiteoutTextRegion(
+                  pr,
+                  { ...item, patchColor },
+                  patchColor,
+                  textItemsRef.current
+                );
                 blitDisplayToVisible(pr, visible);
               }}
               onBakeCommit={(item) => {
                 const pr = pageRendersRef.current.get(page - 1);
                 const visible = pdfCanvasRef.current;
                 if (!pr || !visible) return;
-                bakeTextEdit(pr, item, item.currentText);
+                const next = textItemsRef.current.map((t) =>
+                  t.id === item.id ? item : t
+                );
+                textItemsRef.current = next;
+                rebakePageEdits(pr, next);
                 blitDisplayToVisible(pr, visible);
               }}
               onRestoreCanvas={(itemId) => {
