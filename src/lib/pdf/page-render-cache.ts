@@ -266,7 +266,6 @@ function sampleInkFromOriginalRegion(
       const lum = 0.299 * r + 0.587 * g + 0.114 * b;
       if (lum > 230) continue;
       const chroma = Math.max(r, g, b) - Math.min(r, g, b);
-      const score = 1; // density later via buckets — use simple accumulate
       if (chroma > 30 && lum > 30) {
         const s = chroma * (1.2 - lum / 400);
         if (!bestChromatic || s > bestChromatic.score) {
