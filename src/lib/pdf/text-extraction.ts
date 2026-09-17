@@ -5,7 +5,6 @@ import {
   sampleHasUnderlineFromCanvas,
   sampleTextColorFromCanvas,
 } from "./canvas-color-sampler";
-import { looksLikeLinkBlue } from "./text-links";
 
 export type EditableTextItem = {
   id: string;
@@ -318,7 +317,6 @@ export async function extractPageTextItems(
     findLinkForGlyph,
     DEFAULT_LINK_COLOR,
     isNearBlack,
-    looksLikeLinkBlue,
   } = await import("./text-links");
   const styles = content.styles || {};
 
@@ -376,8 +374,8 @@ export async function extractPageTextItems(
     const linkHit = findLinkForGlyph(e, f, pdfWidth, pdfFontSize, pageLinks);
     const isLink = !!linkHit;
     const linkUrl = linkHit?.url || undefined;
-    // Hyperlinks (and typical link blues) are underlined in source PDFs
-    const isUnderline = isLink || looksLikeLinkBlue(color);
+    // Hyperlinks are underlined; plain blue marketing text is not
+    const isUnderline = isLink;
     if (isLink && isNearBlack(color)) {
       color = DEFAULT_LINK_COLOR;
     }
@@ -716,10 +714,8 @@ export function enrichTextFormattingFromCanvas(
     }
 
     if (!isUnderline) {
-      isUnderline =
-        sampleHasUnderlineFromCanvas(canvas, box, 1) ||
-        looksLikeLinkBlue(color) ||
-        !!item.isLink;
+      // Only real link annotations or a clear underline stroke — not link-blue guess
+      isUnderline = !!item.isLink || sampleHasUnderlineFromCanvas(canvas, box, 1);
     }
 
     if (color === item.color && isUnderline === !!item.isUnderline) {

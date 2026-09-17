@@ -127,8 +127,9 @@ export function EditTextLayer({
 
     const newText = (editor?.innerText ?? sess?.initialText ?? "")
       .replace(/\u00a0/g, " ")
-      .replace(/\n$/g, "")
-      .trim();
+      .replace(/\n$/g, "");
+    // Keep internal spaces ("Ujjwal Panwar"); trim only ends
+    const committedText = newText.replace(/[ \t]+$/g, "").replace(/^[ \t]+/g, "");
 
     editingItemIdRef.current = null;
     sessionRef.current = null;
@@ -139,7 +140,7 @@ export function EditTextLayer({
 
     if (!item || !sess) return;
 
-    if (newText === item.originalText) {
+    if (committedText === item.originalText) {
       if (item.isEdited) {
         onPushHistory();
         onRevertItem(id);
@@ -153,10 +154,10 @@ export function EditTextLayer({
 
     const userChangedColor =
       item.color !== sess.colorAtStart && item.color !== sess.inkColor;
-    const cleared = !newText.trim();
+    const cleared = !committedText;
     const committed: EditableTextItem = {
       ...item,
-      currentText: cleared ? "" : newText,
+      currentText: cleared ? "" : committedText,
       color: userChangedColor ? item.color : sess.inkColor || item.color,
       patchColor: sess.patchColor,
       backgroundColor: sess.patchColor,

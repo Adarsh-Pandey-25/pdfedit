@@ -32,13 +32,20 @@ export function useKeyboardShortcuts({
   useEffect(() => {
     if (!enabled) return;
 
-    const onKeyDown = (e: KeyboardEvent) => {
-      const t = e.target as HTMLElement;
-      const typing =
-        t.tagName === "INPUT" ||
-        t.tagName === "TEXTAREA" ||
-        t.isContentEditable;
+    const isTypingTarget = (t: EventTarget | null): boolean => {
+      if (!(t instanceof HTMLElement)) return false;
+      if (t.tagName === "INPUT" || t.tagName === "TEXTAREA") return true;
+      if (t.isContentEditable) return true;
+      // Caret may sit in a text node whose parent is the editor
+      return !!t.closest?.(
+        '[contenteditable="true"], [contenteditable=""], [data-edit-editor]'
+      );
+    };
 
+    const onKeyDown = (e: KeyboardEvent) => {
+      const typing = isTypingTarget(e.target);
+
+      // Never steal Space while editing text (would block "Ujjwal Panwar")
       if (e.code === "Space" && !typing) {
         if (!e.repeat) {
           prevTool.current = activeTool;
@@ -125,7 +132,8 @@ export function useKeyboardShortcuts({
     };
 
     const onKeyUp = (e: KeyboardEvent) => {
-      if (e.code === "Space") {
+      // Releasing Space must not leave edit-text (that commits mid-type)
+      if (e.code === "Space" && !isTypingTarget(e.target)) {
         setTool(prevTool.current || "select");
       }
     };

@@ -182,10 +182,10 @@ export function getCanvasTextRegion(
     }
   }
 
-  // Modest pad — large pads wipe overlapping neighbors (title under subtitle)
-  const pad = Math.max(2, 1.25 * scale);
-  const ascent = fontPx * 1.0;
-  const descent = fontPx * 0.28;
+  // Tight pad — oversized whiteout bleeds into adjacent lines → overlap
+  const pad = Math.max(1, 0.75 * scale);
+  const ascent = fontPx * 0.95;
+  const descent = fontPx * 0.22;
   const x = ox - pad;
   const y = oyBaseline - ascent - pad;
   const w = Math.max(origW, textW) + pad * 2;
@@ -461,8 +461,9 @@ export function restoreOverlappingNeighbors(
 }
 
 /**
- * Cover original glyphs, draw new text, then restore overlapping neighbors.
- * Enter-after-clear / Delete must fully remove blue without leaving overlap.
+ * Cover original glyphs and draw new text.
+ * Neighbor redraw is only for deletes — live edit must not redraw adjacent
+ * lines (that caused overlapping body text in offer letters).
  */
 export function bakeTextEdit(
   pageRender: PageRender,
@@ -480,13 +481,13 @@ export function bakeTextEdit(
   );
   const ink = item.color || "#000000";
   const patch = item.patchColor || item.backgroundColor || "rgb(255,255,255)";
+  const deleting = !newText.trim();
 
-  // Opaque cover — removes all blue (ink-only leave left overlap ghosts)
   restoreRegionFromOriginal(pageRender, region);
   ctx.fillStyle = patch;
   ctx.fillRect(region.x, region.y, region.w, region.h);
 
-  if (newText.trim()) {
+  if (!deleting) {
     ctx.font = region.fontCss;
     ctx.fillStyle = ink;
     ctx.textBaseline = "alphabetic";
@@ -508,20 +509,21 @@ export function bakeTextEdit(
       );
       ctx.stroke();
     }
+    return;
   }
 
-  // Put the black heading back where the whiteout covered it
+  // Delete only: restore heavily overlapping neighbors (e.g. title under subtitle)
   if (allItems?.length) {
     restoreOverlappingNeighbors(pageRender, item, allItems, region);
   }
 }
 
-/** Whiteout only (for live HTML editing over canvas) */
+/** Whiteout only (for live HTML editing over canvas) — no neighbor redraw */
 export function whiteoutTextRegion(
   pageRender: PageRender,
   item: EditableTextItem,
   patchColor: string,
-  allItems?: EditableTextItem[]
+  _allItems?: EditableTextItem[]
 ): void {
   const ctx = pageRender.displayCanvas.getContext("2d");
   if (!ctx) return;
@@ -533,9 +535,6 @@ export function whiteoutTextRegion(
   restoreRegionFromOriginal(pageRender, region);
   ctx.fillStyle = patchColor;
   ctx.fillRect(region.x, region.y, region.w, region.h);
-  if (allItems?.length) {
-    restoreOverlappingNeighbors(pageRender, item, allItems, region);
-  }
 }
 
 /** Re-apply all committed edits for a page onto a fresh display copy of original */
@@ -551,30 +550,9 @@ export function rebakePageEdits(
   );
   if (!patches.length) return;
 
-  const patchedIds = new Set(patches.map((p) => p.id));
-  const patchRegions: { x: number; y: number; w: number; h: number }[] = [];
-
   for (const item of patches) {
     const text = item.isDeleted ? "" : item.currentText;
     bakeTextEdit(pageRender, item, text, pageItems);
-    patchRegions.push(
-      getCanvasTextRegion(
-        pageRender,
-        item,
-        text.trim() ? text : item.originalText || " "
-      )
-    );
-  }
-
-  // Second pass: neighbors skipped during multi-patch ordering
-  for (const other of pageItems) {
-    if (patchedIds.has(other.id)) continue;
-    if (other.isDeleted || other.isRotated) continue;
-    const text = other.originalText;
-    if (!text?.trim()) continue;
-    const otherRegion = getCanvasTextRegion(pageRender, other, text);
-    if (!patchRegions.some((r) => regionsOverlap(r, otherRegion))) continue;
-    drawTextGlyphs(pageRender, other, text);
   }
 }
 

@@ -87,8 +87,8 @@ export function sampleTextColorFromCanvas(
 }
 
 /**
- * True if a thin strip under the glyph baseline has non-background ink
- * (typical PDF underline drawn as a separate stroke).
+ * True if a thin strip just under the glyph baseline has a continuous ink run
+ * (PDF underline stroke). Ignores descenders / next-line glyphs.
  */
 export function sampleHasUnderlineFromCanvas(
   canvas: HTMLCanvasElement,
@@ -106,35 +106,43 @@ export function sampleHasUnderlineFromCanvas(
         : 1;
 
   const startX = Math.max(0, Math.floor(rect.left * scale));
+  // Sample a thin band just below the box (not inside glyph descenders)
   const underlineTop = Math.max(
     0,
-    Math.floor((rect.top + rect.height * 0.85) * scale)
+    Math.floor((rect.top + rect.height * 0.98) * scale)
   );
   const width = Math.min(
     canvas.width - startX,
     Math.max(1, Math.ceil(rect.width * scale))
   );
+  // Very thin strip — real underlines are ~1–3px at typical zoom
   const height = Math.min(
     canvas.height - underlineTop,
-    Math.max(1, Math.ceil(rect.height * 0.25 * scale))
+    Math.max(1, Math.ceil(Math.max(2, rect.height * 0.08) * scale))
   );
-  if (width <= 2 || height <= 0) return false;
+  if (width <= 8 || height <= 0) return false;
 
   try {
     const { data } = ctx.getImageData(startX, underlineTop, width, height);
     let ink = 0;
-    for (let i = 0; i < data.length; i += 4) {
-      const r = data[i];
-      const g = data[i + 1];
-      const b = data[i + 2];
-      const a = data[i + 3];
-      if (a < 180) continue;
-      if (r > 235 && g > 235 && b > 235) continue;
-      ink++;
+    const colHasInk = new Array(width).fill(false);
+    for (let y = 0; y < height; y++) {
+      for (let x = 0; x < width; x++) {
+        const i = (y * width + x) * 4;
+        const r = data[i];
+        const g = data[i + 1];
+        const b = data[i + 2];
+        const a = data[i + 3];
+        if (a < 180) continue;
+        if (r > 235 && g > 235 && b > 235) continue;
+        ink++;
+        colHasInk[x] = true;
+      }
     }
-    // Underline is a thin run of ink across most of the width
     const dens = ink / (width * height);
-    return dens > 0.04 && dens < 0.55;
+    // Underline spans most of the width as a thin run — not sparse descenders
+    const span = colHasInk.filter(Boolean).length / width;
+    return dens > 0.08 && dens < 0.45 && span > 0.55;
   } catch {
     return false;
   }
