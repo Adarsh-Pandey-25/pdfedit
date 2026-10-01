@@ -574,8 +574,8 @@ export async function generateBeautifulPdf(
   );
 
   pdfDoc.setTitle(options.title || "Document");
-  pdfDoc.setCreator("PDFForge");
-  pdfDoc.setProducer("PDFForge");
+  pdfDoc.setCreator("PdfEdit+");
+  pdfDoc.setProducer("PdfEdit+");
   pdfDoc.setCreationDate(new Date());
 
   const writer = new PdfWriter(pdfDoc, theme);
@@ -696,8 +696,8 @@ export async function generateImagePdf(
   }
 
   doc.setTitle("Images");
-  doc.setCreator("PDFForge");
-  doc.setProducer("PDFForge");
+  doc.setCreator("PdfEdit+");
+  doc.setProducer("PdfEdit+");
   return doc.save({ useObjectStreams: true });
 }
 

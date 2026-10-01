@@ -14,7 +14,7 @@ const testimonials = [
   {
     name: "Priya Sharma",
     role: "Freelance designer",
-    text: "PDFForge replaced three paid apps for me. Merge and compress are blisteringly fast — and I love that nothing uploads.",
+    text: "PdfEdit+ replaced three paid apps for me. Merge and compress are blisteringly fast — and I love that nothing uploads.",
   },
   {
     name: "Marcus Chen",
@@ -43,7 +43,7 @@ export default function HomeBelowFold() {
             >
               Loved by thousands
             </h2>
-            <p className="mt-2 text-text-secondary">What people say about PDFForge.</p>
+            <p className="mt-2 text-text-secondary">What people say about PdfEdit+.</p>
           </div>
           <div className="grid md:grid-cols-3 gap-5">
             {testimonials.map((t) => (

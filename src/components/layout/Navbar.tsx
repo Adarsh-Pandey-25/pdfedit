@@ -4,8 +4,9 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useTheme } from "next-themes";
-import { Menu, Moon, Sun, X, FileStack, Shield } from "lucide-react";
+import { Menu, Moon, Sun, X, Shield } from "lucide-react";
 import { TOOLS, SITE_NAME } from "@/lib/constants";
+import { BrandLogo } from "@/components/layout/BrandLogo";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 
@@ -65,15 +66,10 @@ export function Navbar() {
       <div className="container-max section-pad flex h-14 sm:h-16 items-center justify-between gap-3 sm:gap-4">
         <Link
           href="/"
-          className="flex items-center gap-2 font-bold text-base sm:text-lg tracking-tight text-text-primary shrink-0"
+          className="flex items-center shrink-0"
           aria-label={`${SITE_NAME} home`}
         >
-          <span className="flex h-8 w-8 sm:h-9 sm:w-9 items-center justify-center rounded-xl bg-primary text-white shadow-soft">
-            <FileStack className="h-4 w-4 sm:h-5 sm:w-5" aria-hidden />
-          </span>
-          <span>
-            PDF<span className="text-primary">Forge</span>
-          </span>
+          <BrandLogo priority className="h-7 sm:h-8" />
         </Link>
 
         <nav className="hidden md:flex items-center gap-0.5 lg:gap-1" aria-label="Main">

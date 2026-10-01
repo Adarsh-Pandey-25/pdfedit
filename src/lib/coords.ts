@@ -292,7 +292,7 @@ export function debugExportCoords(
 export function isExportDebugEnabled(): boolean {
   if (typeof window === "undefined") return false;
   try {
-    return localStorage.getItem("pdfforge-export-debug") === "1";
+    return localStorage.getItem("pdfedit-export-debug") === "1";
   } catch {
     return false;
   }

@@ -6,7 +6,9 @@ import { Input } from "@/components/ui/input";
 import { useEditorStore } from "@/lib/editor-store";
 import toast from "react-hot-toast";
 
-const SIG_KEY = "pdfforge-signatures-v1";
+const SIG_KEY = "pdfedit-signatures-v1";
+/** Pre-rebrand key; read as a fallback so saved signatures survive the rename. */
+const LEGACY_SIG_KEY = "pdfforge-signatures-v1";
 const CURSIVE = [
   "Dancing Script",
   "Great Vibes",
@@ -16,7 +18,9 @@ const CURSIVE = [
 
 function loadSaved(): string[] {
   try {
-    return JSON.parse(localStorage.getItem(SIG_KEY) || "[]");
+    const raw =
+      localStorage.getItem(SIG_KEY) ?? localStorage.getItem(LEGACY_SIG_KEY);
+    return JSON.parse(raw || "[]");
   } catch {
     return [];
   }

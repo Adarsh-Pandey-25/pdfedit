@@ -1,4 +1,4 @@
-# PDFForge
+# PdfEdit+
 
 Free, private, browser-based PDF editor built with Next.js 14.
 

@@ -1,4 +1,4 @@
-import { SITE_NAME, SITE_URL, TOOLS } from "@/lib/constants";
+import { SITE_EMAIL, SITE_NAME, SITE_URL, TOOLS } from "@/lib/constants";
 import type { FaqItem } from "@/lib/seo-content";
 
 function JsonLd({ data }: { data: Record<string, unknown> | Record<string, unknown>[] }) {
@@ -18,11 +18,11 @@ export function OrganizationSchema() {
         "@type": "Organization",
         name: SITE_NAME,
         url: SITE_URL,
-        logo: `${SITE_URL}/icon.svg`,
+        logo: `${SITE_URL}/icon-512.png`,
         description: "Free online PDF editor with 15+ browser-based tools",
         contactPoint: {
           "@type": "ContactPoint",
-          email: "hello@pdfforge.app",
+          email: SITE_EMAIL,
           contactType: "customer support",
         },
       }}

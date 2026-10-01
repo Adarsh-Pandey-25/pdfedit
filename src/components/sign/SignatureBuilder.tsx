@@ -20,14 +20,19 @@ import {
   type SignatureFont,
 } from "@/lib/pdf/signature-engine";
 
-const RECENTS_KEY = "pdfforge-sign-recents-v1";
+const RECENTS_KEY = "pdfedit-sign-recents-v1";
+/** Pre-rebrand key; read as a fallback so recents survive the rename. */
+const LEGACY_RECENTS_KEY = "pdfforge-sign-recents-v1";
 const MAX_RECENTS = 6;
 
 type Tab = "draw" | "type" | "upload";
 
 function loadRecents(): SignatureAsset[] {
   try {
-    const parsed = JSON.parse(localStorage.getItem(RECENTS_KEY) || "[]");
+    const raw =
+      localStorage.getItem(RECENTS_KEY) ??
+      localStorage.getItem(LEGACY_RECENTS_KEY);
+    const parsed = JSON.parse(raw || "[]");
     return Array.isArray(parsed) ? parsed.slice(0, MAX_RECENTS) : [];
   } catch {
     return [];

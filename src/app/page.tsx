@@ -30,7 +30,7 @@ export const metadata: Metadata = {
     ],
   }),
   title: {
-    absolute: "PDFForge - Free Online PDF Editor | Merge, Split, Convert",
+    absolute: "PdfEdit+ - Free Online PDF Editor | Merge, Split, Convert",
   },
 };
 
@@ -132,7 +132,7 @@ export default function HomePage() {
       >
         <div className="text-center mb-10">
           <h2 id="why-heading" className="text-3xl sm:text-4xl font-bold tracking-tight">
-            Why PDFForge
+            Why PdfEdit+
           </h2>
           <p className="mt-2 text-text-secondary">Built for privacy and speed.</p>
         </div>

@@ -44,6 +44,7 @@ import {
   Italic,
   Plus,
 } from "lucide-react";
+import { BrandLogo } from "@/components/layout/BrandLogo";
 import { FileUploader } from "@/components/shared/FileUploader";
 import { ProcessingOverlay } from "@/components/shared/ProcessingOverlay";
 import { Button } from "@/components/ui/button";
@@ -1045,9 +1046,7 @@ export function EditClient() {
       {/* HEADER */}
       <header className="bg-bg-card border-b border-primary/15 px-2 sm:px-4 h-12 sm:h-14 flex items-center gap-2 sm:gap-3 shrink-0">
         <div className="flex items-center gap-2 min-w-0 flex-1">
-          <span className="hidden sm:inline text-sm font-bold text-primary shrink-0">
-            PDFForge
-          </span>
+          <BrandLogo className="hidden sm:block h-6 shrink-0" />
           <span className="hidden sm:inline text-primary/30">|</span>
           {editingName ? (
             <Input

@@ -10,7 +10,12 @@ import {
   SoftwareApplicationSchema,
   WebApplicationSchema,
 } from "@/components/seo/StructuredData";
-import { SITE_DESCRIPTION, SITE_NAME, SITE_URL } from "@/lib/constants";
+import {
+  SITE_DESCRIPTION,
+  SITE_NAME,
+  SITE_TWITTER,
+  SITE_URL,
+} from "@/lib/constants";
 import "./globals.css";
 
 const jakarta = Plus_Jakarta_Sans({
@@ -91,7 +96,7 @@ export const metadata: Metadata = {
     description:
       "15+ PDF tools, 100% free, 100% private. Files processed in your browser.",
     images: ["/twitter-card.png"],
-    creator: "@pdfforge",
+    creator: SITE_TWITTER,
   },
   robots: {
     index: true,
@@ -107,8 +112,13 @@ export const metadata: Metadata = {
     },
   },
   icons: {
-    icon: [{ url: "/icon.svg", type: "image/svg+xml" }],
-    apple: [{ url: "/icon.svg", type: "image/svg+xml" }],
+    icon: [
+      { url: "/icon-32.png", sizes: "32x32", type: "image/png" },
+      { url: "/icon-192.png", sizes: "192x192", type: "image/png" },
+      { url: "/icon-512.png", sizes: "512x512", type: "image/png" },
+    ],
+    shortcut: [{ url: "/icon-32.png", sizes: "32x32", type: "image/png" }],
+    apple: [{ url: "/apple-icon.png", sizes: "180x180", type: "image/png" }],
   },
   manifest: "/manifest.webmanifest",
   alternates: {

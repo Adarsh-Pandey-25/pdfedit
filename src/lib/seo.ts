@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { SITE_DESCRIPTION, SITE_NAME, SITE_URL } from "./constants";
+import { SITE_DESCRIPTION, SITE_NAME, SITE_TWITTER, SITE_URL } from "./constants";
 import type { ToolSlug } from "./constants";
 import { getToolSeo } from "./seo-content";
 
@@ -78,7 +78,7 @@ export function createMetadata({
       title: brandedTitle,
       description: desc,
       images: [ogImage === "/og-image.png" ? "/twitter-card.png" : ogImage],
-      creator: "@pdfforge",
+      creator: SITE_TWITTER,
     },
     robots: noIndex
       ? { index: false, follow: false }

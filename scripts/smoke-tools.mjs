@@ -39,7 +39,7 @@ async function makePdf(pages = 3, title = "Smoke") {
       font,
       color: rgb(0.2, 0.2, 0.2),
     });
-    page.drawText("Hello PDFForge smoke test. Editable sample text.", {
+    page.drawText("Hello PdfEdit+ smoke test. Editable sample text.", {
       x: 50,
       y: 700,
       size: 12,

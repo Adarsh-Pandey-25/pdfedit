@@ -277,7 +277,7 @@ export const useEditorStore = create<EditorStore>((set, get) => ({
   addExportTestRect: (pageIndex) => {
     // Enable verbose export logging for this verification session
     try {
-      localStorage.setItem("pdfforge-export-debug", "1");
+      localStorage.setItem("pdfedit-export-debug", "1");
     } catch {
       /* ignore */
     }

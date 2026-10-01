@@ -1,8 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { FileStack, Share2, Globe, Mail, X } from "lucide-react";
-import { SITE_NAME, TOOLS } from "@/lib/constants";
+import { Share2, Globe, Mail, X } from "lucide-react";
+import { SITE_EMAIL, SITE_NAME, TOOLS } from "@/lib/constants";
+import { BrandLogo } from "@/components/layout/BrandLogo";
 
 export function Footer() {
   const year = new Date().getFullYear();
@@ -12,11 +13,12 @@ export function Footer() {
       <div className="container-max section-pad py-14">
         <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-4">
           <div className="space-y-4">
-            <Link href="/" className="inline-flex items-center gap-2 font-bold text-lg">
-              <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary text-white">
-                <FileStack className="h-5 w-5" />
-              </span>
-              PDF<span className="text-primary">Forge</span>
+            <Link
+              href="/"
+              className="inline-flex items-center"
+              aria-label={`${SITE_NAME} home`}
+            >
+              <BrandLogo className="h-8" />
             </Link>
             <p className="text-sm text-text-secondary max-w-xs">
               Free browser-based PDF tools. Your files stay private — processed
@@ -27,7 +29,7 @@ export function Footer() {
                 { icon: X, label: "X", href: "#" },
                 { icon: Share2, label: "Share", href: "#" },
                 { icon: Globe, label: "Website", href: "#" },
-                { icon: Mail, label: "Email", href: "mailto:hello@pdfforge.app" },
+                { icon: Mail, label: "Email", href: `mailto:${SITE_EMAIL}` },
               ].map(({ icon: Icon, label, href }) => (
                 <a
                   key={label}

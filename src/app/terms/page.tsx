@@ -6,13 +6,13 @@ import {
   LegalList,
 } from "@/components/layout/LegalPage";
 import { createMetadata } from "@/lib/seo";
-import { SITE_NAME, SITE_URL } from "@/lib/constants";
+import { SITE_EMAIL, SITE_NAME, SITE_URL } from "@/lib/constants";
 
 export const metadata: Metadata = createMetadata({
   title: "Terms of Service",
   description: `Terms of Service for ${SITE_NAME} — free browser-based PDF tools. Files are processed locally on your device.`,
   path: "/terms",
-  keywords: ["terms of service", "pdf tools terms", "pdfforge terms"],
+  keywords: ["terms of service", "pdf tools terms", "pdfedit+ terms"],
 });
 
 const LAST_UPDATED = "August 6, 2026";
@@ -143,10 +143,10 @@ export default function TermsPage() {
         <p>
           Questions about these Terms:{" "}
           <a
-            href="mailto:hello@pdfforge.app"
+            href={`mailto:${SITE_EMAIL}`}
             className="text-primary hover:underline"
           >
-            hello@pdfforge.app
+            {SITE_EMAIL}
           </a>
           .
         </p>

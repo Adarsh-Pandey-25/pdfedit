@@ -60,7 +60,7 @@ const nextConfig = {
         ],
       },
       {
-        source: "/og-image.svg",
+        source: "/og-image.png",
         headers: [
           {
             key: "Cache-Control",

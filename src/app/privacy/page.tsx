@@ -6,7 +6,7 @@ import {
   LegalList,
 } from "@/components/layout/LegalPage";
 import { createMetadata } from "@/lib/seo";
-import { SITE_NAME, SITE_URL } from "@/lib/constants";
+import { SITE_EMAIL, SITE_NAME, SITE_URL } from "@/lib/constants";
 
 export const metadata: Metadata = createMetadata({
   title: "Privacy Policy",
@@ -117,10 +117,10 @@ export default function PrivacyPage() {
         <p>
           If you email us (for example at{" "}
           <a
-            href="mailto:hello@pdfforge.app"
+            href={`mailto:${SITE_EMAIL}`}
             className="text-primary hover:underline"
           >
-            hello@pdfforge.app
+            {SITE_EMAIL}
           </a>
           ), we receive whatever you choose to include in that message. Use
           email only for support or feedback — do not send confidential

@@ -4,7 +4,7 @@ export type FaqItem = { q: string; a: string };
 
 export type ToolSeoContent = {
   slug: ToolSlug;
-  /** Page <title> segment (layout appends | PDFForge). Keep ~45 chars. */
+  /** Page <title> segment (layout appends | PdfEdit+). Keep ~45 chars. */
   title: string;
   description: string;
   keywords: string[];
@@ -25,7 +25,7 @@ export const HOME_FAQS: FaqItem[] = [
     a: "No. Every tool runs entirely in your browser using WebAssembly and client-side libraries. Your files never leave your device.",
   },
   {
-    q: "Is PDFForge really free?",
+    q: "Is PdfEdit+ really free?",
     a: "Yes. All tools are free to use with no signup, no watermarks on exports, and no usage caps beyond the per-file size limit.",
   },
   {
@@ -55,7 +55,7 @@ export const TOOL_SEO: Record<ToolSlug, ToolSeoContent> = {
     keywords: ["edit pdf", "pdf editor", "add text to pdf", "annotate pdf", "sign pdf online"],
     h1: "Edit PDF Online Free",
     intro:
-      "Edit PDF files directly in your browser with PDFForge’s free online PDF editor. Add text, images, signatures, highlights, shapes, and annotations without installing software. Your documents stay private — all editing happens locally on your device. Ideal for contracts, forms, invoices, resumes, and everyday PDF documents.",
+      "Edit PDF files directly in your browser with PdfEdit+’s free online PDF editor. Add text, images, signatures, highlights, shapes, and annotations without installing software. Your documents stay private — all editing happens locally on your device. Ideal for contracts, forms, invoices, resumes, and everyday PDF documents.",
     howToTitle: "How to Edit a PDF Online",
     steps: [
       "Upload your PDF by dragging it onto the page or choosing a file.",
@@ -78,7 +78,7 @@ export const TOOL_SEO: Record<ToolSlug, ToolSeoContent> = {
       },
       {
         q: "Is the PDF editor free?",
-        a: "Yes. PDFForge’s online PDF editor is free with no signup and no watermarks on downloads.",
+        a: "Yes. PdfEdit+’s online PDF editor is free with no signup and no watermarks on downloads.",
       },
       {
         q: "Do you upload my PDF?",
@@ -95,7 +95,7 @@ export const TOOL_SEO: Record<ToolSlug, ToolSeoContent> = {
     keywords: ["merge pdf", "combine pdf", "join pdf", "pdf merger", "merge pdf free"],
     h1: "Merge PDF Files Online Free",
     intro:
-      "Combine multiple PDF files into a single document with PDFForge’s free PDF merger. Upload several PDFs, drag to reorder, and download one merged file. Processing happens in your browser — nothing is uploaded to our servers. Perfect for reports, contracts, portfolios, and multi-document packets.",
+      "Combine multiple PDF files into a single document with PdfEdit+’s free PDF merger. Upload several PDFs, drag to reorder, and download one merged file. Processing happens in your browser — nothing is uploaded to our servers. Perfect for reports, contracts, portfolios, and multi-document packets.",
     howToTitle: "How to Merge PDFs",
     steps: [
       "Upload two or more PDF files.",
@@ -130,7 +130,7 @@ export const TOOL_SEO: Record<ToolSlug, ToolSeoContent> = {
     keywords: ["split pdf", "extract pdf pages", "pdf splitter", "divide pdf"],
     h1: "Split PDF Online Free",
     intro:
-      "Split large PDFs into smaller files or extract only the pages you need. PDFForge’s free PDF splitter lets you choose page ranges and download the result instantly. Everything runs in your browser for maximum privacy.",
+      "Split large PDFs into smaller files or extract only the pages you need. PdfEdit+’s free PDF splitter lets you choose page ranges and download the result instantly. Everything runs in your browser for maximum privacy.",
     howToTitle: "How to Split a PDF",
     steps: [
       "Upload the PDF you want to split.",
@@ -161,7 +161,7 @@ export const TOOL_SEO: Record<ToolSlug, ToolSeoContent> = {
     keywords: ["compress pdf", "reduce pdf size", "pdf compressor", "optimize pdf"],
     h1: "Compress PDF Online Free",
     intro:
-      "Reduce PDF file size for email, uploads, and sharing with PDFForge’s free PDF compressor. Choose a quality level that balances clarity and size. Compression runs locally in your browser so your documents stay private.",
+      "Reduce PDF file size for email, uploads, and sharing with PdfEdit+’s free PDF compressor. Choose a quality level that balances clarity and size. Compression runs locally in your browser so your documents stay private.",
     howToTitle: "How to Compress a PDF",
     steps: [
       "Upload your PDF file.",
@@ -192,7 +192,7 @@ export const TOOL_SEO: Record<ToolSlug, ToolSeoContent> = {
     keywords: ["pdf to image", "pdf to png", "pdf to jpg", "convert pdf pages"],
     h1: "Convert PDF to Image Online",
     intro:
-      "Turn PDF pages into high-quality images with PDFForge’s free PDF to image converter. Export pages as PNG or JPG for presentations, web use, or editing. Conversion happens in your browser — your PDF is never uploaded.",
+      "Turn PDF pages into high-quality images with PdfEdit+’s free PDF to image converter. Export pages as PNG or JPG for presentations, web use, or editing. Conversion happens in your browser — your PDF is never uploaded.",
     howToTitle: "How to Convert PDF to Images",
     steps: [
       "Upload your PDF file.",
@@ -223,7 +223,7 @@ export const TOOL_SEO: Record<ToolSlug, ToolSeoContent> = {
     keywords: ["image to pdf", "jpg to pdf", "png to pdf", "convert images to pdf"],
     h1: "Convert Images to PDF Online",
     intro:
-      "Create a polished PDF from your photos or screenshots. Upload JPG, PNG, or WebP files, arrange them, and download a single PDF. PDFForge builds the document locally so your images stay on your device.",
+      "Create a polished PDF from your photos or screenshots. Upload JPG, PNG, or WebP files, arrange them, and download a single PDF. PdfEdit+ builds the document locally so your images stay on your device.",
     howToTitle: "How to Convert Images to PDF",
     steps: [
       "Upload one or more images.",
@@ -254,7 +254,7 @@ export const TOOL_SEO: Record<ToolSlug, ToolSeoContent> = {
     keywords: ["word to pdf", "docx to pdf", "convert word", "office to pdf"],
     h1: "Convert Word to PDF Online",
     intro:
-      "Convert DOCX Word documents into shareable PDFs with PDFForge. Headings, lists, and formatting are mapped into a clean PDF layout using our browser-based generator. Your document is not uploaded to a server.",
+      "Convert DOCX Word documents into shareable PDFs with PdfEdit+. Headings, lists, and formatting are mapped into a clean PDF layout using our browser-based generator. Your document is not uploaded to a server.",
     howToTitle: "How to Convert Word to PDF",
     steps: [
       "Upload your .docx Word file.",
@@ -285,7 +285,7 @@ export const TOOL_SEO: Record<ToolSlug, ToolSeoContent> = {
     keywords: ["text to pdf", "markdown to pdf", "create pdf", "plain text pdf"],
     h1: "Create a PDF from Text Online",
     intro:
-      "Turn notes, Markdown, or plain text into a beautiful PDF. PDFForge supports headings, lists, quotes, and Unicode characters with professional themes. Generation runs in your browser with embedded fonts.",
+      "Turn notes, Markdown, or plain text into a beautiful PDF. PdfEdit+ supports headings, lists, quotes, and Unicode characters with professional themes. Generation runs in your browser with embedded fonts.",
     howToTitle: "How to Create a PDF from Text",
     steps: [
       "Paste or type your text (Markdown-style syntax supported).",
@@ -316,7 +316,7 @@ export const TOOL_SEO: Record<ToolSlug, ToolSeoContent> = {
     keywords: ["rotate pdf", "rotate pdf pages", "fix pdf orientation"],
     h1: "Rotate PDF Pages Online",
     intro:
-      "Fix PDF orientation in seconds. Rotate individual pages or the whole document left or right. PDFForge applies rotations locally so scanned documents and exports stay private.",
+      "Fix PDF orientation in seconds. Rotate individual pages or the whole document left or right. PdfEdit+ applies rotations locally so scanned documents and exports stay private.",
     howToTitle: "How to Rotate a PDF",
     steps: [
       "Upload your PDF.",
@@ -347,7 +347,7 @@ export const TOOL_SEO: Record<ToolSlug, ToolSeoContent> = {
     keywords: ["pdf watermark", "add watermark to pdf", "stamp pdf", "confidential watermark"],
     h1: "Add a Watermark to PDF Online",
     intro:
-      "Protect and brand documents with text or image watermarks. Adjust opacity, rotation, color, and placement, then apply across your PDF. PDFForge watermarks your files in the browser so drafts and confidential docs never leave your device.",
+      "Protect and brand documents with text or image watermarks. Adjust opacity, rotation, color, and placement, then apply across your PDF. PdfEdit+ watermarks your files in the browser so drafts and confidential docs never leave your device.",
     howToTitle: "How to Watermark a PDF",
     steps: [
       "Upload your PDF.",
@@ -378,7 +378,7 @@ export const TOOL_SEO: Record<ToolSlug, ToolSeoContent> = {
     keywords: ["add page numbers to pdf", "pdf pagination", "number pdf pages"],
     h1: "Add Page Numbers to PDF Online",
     intro:
-      "Number your PDF pages with flexible formats and positions. PDFForge lets you place page numbers at common corners or centers and download an updated PDF — all processed locally in your browser.",
+      "Number your PDF pages with flexible formats and positions. PdfEdit+ lets you place page numbers at common corners or centers and download an updated PDF — all processed locally in your browser.",
     howToTitle: "How to Add Page Numbers",
     steps: [
       "Upload your PDF.",
@@ -409,7 +409,7 @@ export const TOOL_SEO: Record<ToolSlug, ToolSeoContent> = {
     keywords: ["pdf viewer", "read pdf online", "online pdf reader"],
     h1: "Free Online PDF Viewer",
     intro:
-      "Open and read PDFs instantly with PDFForge’s free online PDF viewer. Zoom, navigate pages, and review documents without installing a reader. Files are rendered locally for privacy.",
+      "Open and read PDFs instantly with PdfEdit+’s free online PDF viewer. Zoom, navigate pages, and review documents without installing a reader. Files are rendered locally for privacy.",
     howToTitle: "How to View a PDF Online",
     steps: [
       "Upload or open your PDF file.",
@@ -440,7 +440,7 @@ export const TOOL_SEO: Record<ToolSlug, ToolSeoContent> = {
     keywords: ["protect pdf", "password protect pdf", "encrypt pdf", "lock pdf"],
     h1: "Password Protect a PDF Online",
     intro:
-      "Lock sensitive PDFs with a password before you share them. PDFForge encrypts files in your browser so credentials and document contents are not sent to our servers. Use it for contracts, HR files, and personal records.",
+      "Lock sensitive PDFs with a password before you share them. PdfEdit+ encrypts files in your browser so credentials and document contents are not sent to our servers. Use it for contracts, HR files, and personal records.",
     howToTitle: "How to Protect a PDF",
     steps: [
       "Upload the PDF you want to lock.",
@@ -471,7 +471,7 @@ export const TOOL_SEO: Record<ToolSlug, ToolSeoContent> = {
     keywords: ["unlock pdf", "remove pdf password", "decrypt pdf", "open protected pdf"],
     h1: "Unlock a Password-Protected PDF",
     intro:
-      "Remove a PDF password when you are authorized and know the credentials. PDFForge unlocks the file locally in your browser so you can edit, merge, or share it again without uploading sensitive documents.",
+      "Remove a PDF password when you are authorized and know the credentials. PdfEdit+ unlocks the file locally in your browser so you can edit, merge, or share it again without uploading sensitive documents.",
     howToTitle: "How to Unlock a PDF",
     steps: [
       "Upload the protected PDF.",
@@ -502,7 +502,7 @@ export const TOOL_SEO: Record<ToolSlug, ToolSeoContent> = {
     keywords: ["sign pdf", "esign pdf", "add signature to pdf", "electronic signature"],
     h1: "Sign PDF Online Free",
     intro:
-      "Sign agreements and forms without printing. Draw, type, or upload a signature image and place it on your PDF. PDFForge keeps signing local to your browser for a private, free e-sign workflow.",
+      "Sign agreements and forms without printing. Draw, type, or upload a signature image and place it on your PDF. PdfEdit+ keeps signing local to your browser for a private, free e-sign workflow.",
     howToTitle: "How to Sign a PDF",
     steps: [
       "Upload the PDF that needs a signature.",
@@ -520,7 +520,7 @@ export const TOOL_SEO: Record<ToolSlug, ToolSeoContent> = {
     faqs: [
       {
         q: "Is an electronic signature legally binding?",
-        a: "Requirements vary by jurisdiction and document type. PDFForge provides the signing tools; consult local rules for legal validity.",
+        a: "Requirements vary by jurisdiction and document type. PdfEdit+ provides the signing tools; consult local rules for legal validity.",
       },
     ],
     related: ["edit", "protect", "watermark"],
@@ -533,7 +533,7 @@ export const TOOL_SEO: Record<ToolSlug, ToolSeoContent> = {
     keywords: ["extract text from pdf", "pdf to text", "copy pdf text", "pdf text extractor"],
     h1: "Extract Text from PDF Online",
     intro:
-      "Pull selectable text out of PDF documents for notes, quotes, or reuse. PDFForge extracts text in your browser and can optionally generate a clean downloadable PDF from the result — without uploading your file.",
+      "Pull selectable text out of PDF documents for notes, quotes, or reuse. PdfEdit+ extracts text in your browser and can optionally generate a clean downloadable PDF from the result — without uploading your file.",
     howToTitle: "How to Extract Text from a PDF",
     steps: [
       "Upload your PDF.",
