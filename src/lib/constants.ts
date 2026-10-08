@@ -20,9 +20,10 @@ import {
 export const SITE_NAME = "PdfEdit+";
 /** Wordmark split for the navbar/footer text fallback. */
 export const SITE_NAME_PARTS = { lead: "PdfEdit", accent: "+" } as const;
-export const SITE_URL =
-  process.env.NEXT_PUBLIC_SITE_URL ?? "https://pdfeditplus.app";
-export const SITE_EMAIL = "hello@pdfeditplus.app";
+export const SITE_URL = (
+  process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.pdfeditplus.com"
+).replace(/\/+$/, "");
+export const SITE_EMAIL = "hello@pdfeditplus.com";
 export const SITE_TWITTER = "@pdfeditplus";
 export const SITE_DESCRIPTION =
   "Free online PDF editor with 15+ tools. Edit text, merge, split, compress, convert, sign, and watermark PDFs. No signup, no watermarks — files never leave your browser.";
