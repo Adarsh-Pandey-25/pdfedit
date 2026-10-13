@@ -30,6 +30,21 @@ export function OrganizationSchema() {
   );
 }
 
+/** Homepage only — Google reads WebSite markup there to pick the site name. */
+export function WebSiteSchema() {
+  return (
+    <JsonLd
+      data={{
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        name: SITE_NAME,
+        alternateName: ["PdfEditPlus", "PDF Edit Plus"],
+        url: `${SITE_URL}/`,
+      }}
+    />
+  );
+}
+
 export function WebApplicationSchema() {
   return (
     <JsonLd

@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useTheme } from "next-themes";
 import { Menu, Moon, Sun, X, Shield } from "lucide-react";
@@ -18,6 +18,7 @@ const navLinks = [
 
 export function Navbar() {
   const pathname = usePathname();
+  const router = useRouter();
   const { theme, setTheme, resolvedTheme } = useTheme();
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -63,13 +64,14 @@ export function Navbar() {
           : "bg-bg-primary"
       )}
     >
+      <div className="h-1.5 w-full bg-slate-900" aria-hidden />
       <div className="container-max section-pad flex h-14 sm:h-16 items-center justify-between gap-3 sm:gap-4">
         <Link
           href="/"
           className="flex items-center shrink-0"
           aria-label={`${SITE_NAME} home`}
         >
-          <BrandLogo priority className="h-7 sm:h-8" />
+          <BrandLogo priority className="h-8 sm:h-9 lg:h-10" />
         </Link>
 
         <nav className="hidden md:flex items-center gap-0.5 lg:gap-1" aria-label="Main">
@@ -90,7 +92,7 @@ export function Navbar() {
             >
               All tools
             </button>
-            <div className="invisible opacity-0 group-hover:visible group-hover:opacity-100 transition-opacity absolute left-0 top-full pt-2 w-72 z-50">
+            <div className="invisible opacity-0 group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100 transition-opacity absolute left-0 top-full pt-2 w-72 z-50">
               <div className="card-surface rounded-2xl p-2 max-h-80 overflow-y-auto grid gap-0.5">
                 {TOOLS.map((tool) => {
                   const Icon = tool.icon;
@@ -98,7 +100,11 @@ export function Navbar() {
                     <Link
                       key={tool.slug}
                       href={tool.href}
-                      prefetch
+                      // Menu is always in the DOM, so viewport prefetch would
+                      // load all 16 tool bundles on every page; prefetch on intent.
+                      prefetch={false}
+                      onMouseEnter={() => router.prefetch(tool.href)}
+                      onFocus={() => router.prefetch(tool.href)}
                       className="flex items-center gap-2 rounded-xl px-3 py-2 text-sm text-text-primary hover:bg-primary/10"
                     >
                       <Icon className="h-4 w-4 text-primary shrink-0" aria-hidden />

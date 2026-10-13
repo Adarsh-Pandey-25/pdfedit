@@ -1,4 +1,8 @@
-import { PageSizes } from "pdf-lib";
+/**
+ * pdf-lib's `PageSizes.A4`, inlined so importing theme options (used by tool
+ * UIs on first render) doesn't pull all of pdf-lib into the page bundle.
+ */
+const A4: [number, number] = [595.28, 841.89];
 
 export type PdfColor = [number, number, number];
 export type PdfThemeName = keyof typeof THEMES;
@@ -34,7 +38,7 @@ export type PdfThemeDefinition = {
 };
 
 export const DEFAULT_THEME: PdfThemeDefinition = {
-  pageSize: PageSizes.A4,
+  pageSize: A4,
   margin: { top: 72, right: 72, bottom: 72, left: 72 },
   colors: {
     text: [0.15, 0.15, 0.17],

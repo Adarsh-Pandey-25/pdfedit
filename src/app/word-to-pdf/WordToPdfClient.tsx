@@ -9,7 +9,6 @@ import { StepIndicator } from "@/components/shared/StepIndicator";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { parseWordContent } from "@/lib/pdf-content-parser";
-import { generateBeautifulPdf } from "@/lib/pdf-generator";
 import {
   THEME_OPTIONS,
   type PdfThemeName,
@@ -55,6 +54,8 @@ export function WordToPdfClient() {
     try {
       const blocks = parseWordContent(html);
       const title = fileName.replace(/\.[^.]+$/i, "");
+      // Loaded on demand: pdf-lib + fontkit are ~540 KB gzipped.
+      const { generateBeautifulPdf } = await import("@/lib/pdf-generator");
       const bytes = await generateBeautifulPdf(blocks, { title, theme });
       setProgress(90);
       setResult(pdfBlob(bytes));

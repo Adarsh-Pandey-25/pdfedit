@@ -64,7 +64,7 @@ export function HeroSection() {
 
   return (
     <section className="relative overflow-hidden bg-bg-primary">
-      <div className="relative container-max section-pad pt-2 pb-8 sm:pt-3 sm:pb-10 md:pb-12 text-center">
+      <div className="relative container-max section-pad pt-10 pb-8 sm:pt-14 sm:pb-10 md:pt-20 md:pb-12 text-center">
         <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-extrabold tracking-tight text-balance max-w-4xl mx-auto text-text-primary leading-tight anim-fade-up px-1">
           Edit, Convert &amp; Manage PDFs Free &amp; Online
         </h1>

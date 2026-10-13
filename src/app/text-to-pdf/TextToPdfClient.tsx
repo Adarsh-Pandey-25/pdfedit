@@ -9,7 +9,6 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { parseTextContent } from "@/lib/pdf-content-parser";
-import { generateBeautifulPdf } from "@/lib/pdf-generator";
 import {
   THEME_OPTIONS,
   type PdfThemeName,
@@ -51,6 +50,8 @@ export function TextToPdfClient() {
     setProcessing(true);
     setProgress(20);
     try {
+      // Loaded on demand: pdf-lib + fontkit are ~540 KB gzipped.
+      const { generateBeautifulPdf } = await import("@/lib/pdf-generator");
       const bytes = await generateBeautifulPdf(parseTextContent(text), {
         title: title.trim() || "Document",
         theme,

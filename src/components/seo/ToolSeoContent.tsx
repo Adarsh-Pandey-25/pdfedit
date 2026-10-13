@@ -111,7 +111,6 @@ export function ToolSeoContent({ slug }: { slug: ToolSlug }) {
                 <Link
                   href={tool.href}
                   className="card-surface rounded-2xl p-4 block h-full hover:border-primary/40 transition-colors"
-                  aria-label={`Open ${tool.title}`}
                 >
                   <span className="font-semibold text-text-primary group-hover:text-primary">
                     {tool.title}

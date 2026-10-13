@@ -1,3 +1,27 @@
+// Content-Security-Policy, shipped in REPORT-ONLY mode: browsers log
+// violations to the console but block nothing. Switch the header key to
+// "Content-Security-Policy" only after the report-only run is clean in
+// production. 'unsafe-inline' scripts are needed because statically rendered
+// Next.js pages use inline bootstrap scripts (nonces require dynamic rendering).
+const gaEnabled = Boolean(process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID);
+const csp = [
+  "default-src 'self'",
+  `script-src 'self' 'unsafe-inline'${gaEnabled ? " https://www.googletagmanager.com" : ""}`,
+  // Google Fonts CSS/files: handwriting fonts in the signature tools
+  "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
+  "font-src 'self' data: https://fonts.gstatic.com",
+  "img-src 'self' data: blob:",
+  // fetch() of data:/blob: URLs is used to turn canvases into bytes
+  `connect-src 'self' data: blob:${gaEnabled ? " https://www.googletagmanager.com https://*.google-analytics.com https://*.analytics.google.com" : ""}`,
+  // pdf.js worker is loaded from unpkg (see src/lib/pdf/pdfjs.ts)
+  "worker-src 'self' blob: https://unpkg.com",
+  "frame-src 'self' blob:",
+  "object-src 'none'",
+  "base-uri 'self'",
+  "form-action 'self'",
+  "frame-ancestors 'self'",
+].join("; ");
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
@@ -36,6 +60,7 @@ const nextConfig = {
           { key: "X-DNS-Prefetch-Control", value: "on" },
           { key: "X-Content-Type-Options", value: "nosniff" },
           { key: "X-Frame-Options", value: "SAMEORIGIN" },
+          { key: "Content-Security-Policy-Report-Only", value: csp },
           {
             key: "Referrer-Policy",
             value: "strict-origin-when-cross-origin",

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import dynamic from "next/dynamic";
+import Link from "next/link";
 import {
   Upload,
   Pencil,
@@ -13,7 +14,8 @@ import {
 } from "lucide-react";
 import { HeroSection } from "@/components/home/HeroSection";
 import { ToolsGrid } from "@/components/home/ToolsGrid";
-import { FAQSchema } from "@/components/seo/StructuredData";
+import { FAQSchema, WebSiteSchema } from "@/components/seo/StructuredData";
+import { TOOLS } from "@/lib/constants";
 import { createMetadata } from "@/lib/seo";
 import { HOME_FAQS } from "@/lib/seo-content";
 
@@ -60,6 +62,7 @@ const steps = [
 export default function HomePage() {
   return (
     <>
+      <WebSiteSchema />
       <FAQSchema faqs={HOME_FAQS} />
       <HeroSection />
 
@@ -76,18 +79,18 @@ export default function HomePage() {
             All PDF tools
           </h2>
           <p className="mt-2 text-sm sm:text-base text-text-secondary max-w-xl mx-auto px-2">
-            Fifteen professional tools — free, fast, and private.{" "}
-            <a href="/edit" className="text-primary font-medium hover:underline">
+            {TOOLS.length} professional tools — free, fast, and private.{" "}
+            <Link href="/edit" prefetch={false} className="text-primary font-medium hover:underline">
               Use our free PDF editor
-            </a>
+            </Link>
             ,{" "}
-            <a href="/merge" className="text-primary font-medium hover:underline">
+            <Link href="/merge" prefetch={false} className="text-primary font-medium hover:underline">
               merge multiple PDFs
-            </a>
+            </Link>
             , or{" "}
-            <a href="/split" className="text-primary font-medium hover:underline">
+            <Link href="/split" prefetch={false} className="text-primary font-medium hover:underline">
               split a PDF into pages
-            </a>
+            </Link>
             .
           </p>
         </div>

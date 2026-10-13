@@ -48,7 +48,7 @@ export default function HomeBelowFold() {
           <div className="grid md:grid-cols-3 gap-5">
             {testimonials.map((t) => (
               <blockquote key={t.name} className="card-surface rounded-3xl p-6">
-                <div className="flex gap-0.5 text-accent mb-3" aria-label="5 stars">
+                <div className="flex gap-0.5 text-accent mb-3" role="img" aria-label="5 stars">
                   {Array.from({ length: 5 }).map((_, i) => (
                     <Star key={i} className="h-4 w-4 fill-current" aria-hidden />
                   ))}

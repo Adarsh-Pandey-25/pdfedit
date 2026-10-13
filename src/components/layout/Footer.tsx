@@ -108,6 +108,9 @@ export function Footer() {
             © {year} {SITE_NAME}. All rights reserved.
           </p>
           <div className="flex flex-wrap gap-4">
+            <Link href="/about" className="hover:text-primary">
+              About
+            </Link>
             <Link href="/privacy" className="hover:text-primary">
               Privacy
             </Link>

@@ -64,7 +64,8 @@ export function FileUploader({
       {...getRootProps()}
       role="button"
       tabIndex={0}
-      aria-label={label}
+      // No aria-label: the accessible name comes from the visible text below,
+      // which starts with `label` (WCAG 2.5.3 label-in-name).
       className={cn(
         "group relative cursor-pointer rounded-3xl border-2 border-dashed border-primary/35 bg-bg-card/70 p-8 sm:p-12 text-center transition-all duration-300 hover:border-primary hover:shadow-soft focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary",
         isDragActive && "dropzone-active scale-[1.01]",

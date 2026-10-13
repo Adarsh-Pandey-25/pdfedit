@@ -10,10 +10,7 @@ import { StepIndicator } from "@/components/shared/StepIndicator";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
-import {
-  generateImagePdf,
-  type PdfImageInput,
-} from "@/lib/pdf-generator";
+import type { PdfImageInput } from "@/lib/pdf-generator";
 import { downloadBlob, pdfBlob } from "@/lib/utils";
 import { useConfetti } from "@/hooks/useConfetti";
 
@@ -72,6 +69,8 @@ export function ImageToPdfClient() {
         pageSize === "custom"
           ? ([mmToPt(customW), mmToPt(customH)] as [number, number])
           : pageSize;
+      // Loaded on demand: pdf-lib + fontkit are ~540 KB gzipped.
+      const { generateImagePdf } = await import("@/lib/pdf-generator");
       const bytes = await generateImagePdf(images, {
         pageSize: pdfPageSize,
         orientation,

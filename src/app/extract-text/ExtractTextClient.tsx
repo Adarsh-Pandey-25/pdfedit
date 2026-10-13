@@ -9,7 +9,6 @@ import { StepIndicator } from "@/components/shared/StepIndicator";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { parseTextContent } from "@/lib/pdf-content-parser";
-import { generateBeautifulPdf } from "@/lib/pdf-generator";
 import {
   THEME_OPTIONS,
   type PdfThemeName,
@@ -68,6 +67,8 @@ export function ExtractTextClient() {
     setProgress(20);
     try {
       const title = fileName.replace(/\.pdf$/i, "") + " — Extracted Text";
+      // Loaded on demand: pdf-lib + fontkit are ~540 KB gzipped.
+      const { generateBeautifulPdf } = await import("@/lib/pdf-generator");
       const bytes = await generateBeautifulPdf(parseTextContent(text), {
         title,
         theme,

@@ -121,9 +121,8 @@ export const metadata: Metadata = {
     apple: [{ url: "/apple-icon.png", sizes: "180x180", type: "image/png" }],
   },
   manifest: "/manifest.webmanifest",
-  alternates: {
-    canonical: SITE_URL,
-  },
+  // No layout-level canonical: every page sets its own via createMetadata(),
+  // and an inherited one made 404 responses canonicalize to the homepage.
   verification: {
     ...(googleVerification ? { google: googleVerification } : {}),
     ...(yandexVerification ? { yandex: yandexVerification } : {}),

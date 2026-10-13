@@ -22,7 +22,7 @@ export type ToolSeoContent = {
 export const HOME_FAQS: FaqItem[] = [
   {
     q: "Are my files uploaded to a server?",
-    a: "No. Every tool runs entirely in your browser using WebAssembly and client-side libraries. Your files never leave your device.",
+    a: "No. Every tool runs entirely in your browser using client-side JavaScript libraries such as pdf-lib and PDF.js. Your files never leave your device.",
   },
   {
     q: "Is PdfEdit+ really free?",
@@ -34,11 +34,11 @@ export const HOME_FAQS: FaqItem[] = [
   },
   {
     q: "Does it work offline?",
-    a: "After the app loads, most tools work without a network connection since processing is local. The first visit needs internet to load scripts and fonts.",
+    a: "Not yet. Your files are processed on your device, but the site needs an internet connection to load each tool and its PDF engine when you use it.",
   },
   {
     q: "Which browsers are supported?",
-    a: "Chrome, Edge, Firefox, and Safari (recent versions). A modern browser with WebAssembly support is required.",
+    a: "Recent versions of Chrome, Edge, Firefox, and Safari.",
   },
   {
     q: "Can I use it on my phone?",
@@ -179,14 +179,18 @@ export const TOOL_SEO: Record<ToolSlug, ToolSeoContent> = {
     faqs: [
       {
         q: "Will compression reduce quality?",
-        a: "Some modes reduce image quality to shrink size. Pick a lighter setting when fidelity matters most.",
+        a: "Yes, to some degree. Every level re-renders each page as a JPEG image; stronger levels use lower resolution and image quality. Pick the lightest level when fidelity matters most.",
+      },
+      {
+        q: "Will text stay selectable after compression?",
+        a: "No. Because pages are converted to images, text, links, and form fields in the compressed copy are no longer selectable or searchable. Text-only PDFs may not get smaller, so keep your original file.",
       },
     ],
     related: ["merge", "pdf-to-image", "protect"],
   },
   "pdf-to-image": {
     slug: "pdf-to-image",
-    title: "PDF to Image Converter Free",
+    title: "PDF to JPG & PNG Converter Free",
     description:
       "Convert PDF pages to PNG or JPG images online for free. Private browser conversion, no signup required.",
     keywords: ["pdf to image", "pdf to png", "pdf to jpg", "convert pdf pages"],
@@ -217,7 +221,7 @@ export const TOOL_SEO: Record<ToolSlug, ToolSeoContent> = {
   },
   "image-to-pdf": {
     slug: "image-to-pdf",
-    title: "Image to PDF Converter Free",
+    title: "JPG to PDF – Convert Images to PDF Free",
     description:
       "Convert JPG, PNG, and WebP images to PDF online for free. Combine multiple images into one PDF privately in your browser.",
     keywords: ["image to pdf", "jpg to pdf", "png to pdf", "convert images to pdf"],
@@ -242,6 +246,10 @@ export const TOOL_SEO: Record<ToolSlug, ToolSeoContent> = {
       {
         q: "Can I add multiple images?",
         a: "Yes. Add several images and they become pages in the output PDF.",
+      },
+      {
+        q: "Does it add anything to my pages?",
+        a: "Yes. A small page number (for example, \"1 / 3\") is printed at the bottom of each page.",
       },
     ],
     related: ["pdf-to-image", "merge", "compress"],
@@ -273,6 +281,10 @@ export const TOOL_SEO: Record<ToolSlug, ToolSeoContent> = {
       {
         q: "Does it support .doc files?",
         a: "The converter focuses on modern DOCX files. Save older documents as DOCX before converting.",
+      },
+      {
+        q: "Are images and tables included?",
+        a: "Embedded images are not included, and tables are simplified into plain text. Headings, paragraphs, lists, and basic text formatting are converted.",
       },
     ],
     related: ["text-to-pdf", "merge", "compress"],
@@ -343,23 +355,23 @@ export const TOOL_SEO: Record<ToolSlug, ToolSeoContent> = {
     slug: "watermark",
     title: "Add Watermark to PDF Free",
     description:
-      "Add text or image watermarks to PDF online for free. Control opacity, angle, and position. Private browser processing.",
+      "Add a text watermark to PDF online for free. Control font, opacity, angle, and position. Private browser processing.",
     keywords: ["pdf watermark", "add watermark to pdf", "stamp pdf", "confidential watermark"],
     h1: "Add a Watermark to PDF Online",
     intro:
-      "Protect and brand documents with text or image watermarks. Adjust opacity, rotation, color, and placement, then apply across your PDF. PdfEdit+ watermarks your files in the browser so drafts and confidential docs never leave your device.",
+      "Protect and brand documents with a text watermark such as CONFIDENTIAL or DRAFT. Adjust font, size, opacity, rotation, color, and placement, then apply it across your PDF. PdfEdit+ watermarks your files in the browser so drafts and confidential docs never leave your device.",
     howToTitle: "How to Watermark a PDF",
     steps: [
       "Upload your PDF.",
-      "Enter watermark text or choose an image.",
+      "Enter your watermark text.",
       "Tune opacity, angle, color, and position.",
       "Apply and download the watermarked PDF.",
     ],
     featuresTitle: "Watermark Features",
     features: [
-      "Text and image watermarks",
-      "Opacity, angle, and position controls",
-      "Tile and corner placement options",
+      "Text watermarks with font, size, bold, and italic options",
+      "Opacity, angle, and color controls",
+      "Nine placement positions, including corners and center",
       "Private local processing",
     ],
     faqs: [
@@ -465,13 +477,13 @@ export const TOOL_SEO: Record<ToolSlug, ToolSeoContent> = {
   },
   unlock: {
     slug: "unlock",
-    title: "Unlock PDF Remove Password",
+    title: "Unlock PDF – Remove PDF Password Free",
     description:
       "Remove PDF password protection online when you know the password. Unlock PDFs privately in your browser — free, no signup.",
     keywords: ["unlock pdf", "remove pdf password", "decrypt pdf", "open protected pdf"],
     h1: "Unlock a Password-Protected PDF",
     intro:
-      "Remove a PDF password when you are authorized and know the credentials. PdfEdit+ unlocks the file locally in your browser so you can edit, merge, or share it again without uploading sensitive documents.",
+      "Remove a PDF password when you are authorized and know the credentials. PdfEdit+ unlocks the file locally in your browser so you can merge, annotate, or share it again without uploading sensitive documents.",
     howToTitle: "How to Unlock a PDF",
     steps: [
       "Upload the protected PDF.",
@@ -490,6 +502,10 @@ export const TOOL_SEO: Record<ToolSlug, ToolSeoContent> = {
       {
         q: "Can you crack unknown passwords?",
         a: "No. You must provide the correct password. We do not offer password cracking.",
+      },
+      {
+        q: "Will the unlocked PDF keep selectable text?",
+        a: "No. The unlocked copy is rebuilt from high-quality page images, so text is not selectable or editable. Keep your original if you need the text layer.",
       },
     ],
     related: ["protect", "edit", "merge"],
@@ -527,7 +543,7 @@ export const TOOL_SEO: Record<ToolSlug, ToolSeoContent> = {
   },
   "extract-text": {
     slug: "extract-text",
-    title: "Extract Text from PDF Free",
+    title: "Extract Text from PDF – PDF to Text Free",
     description:
       "Extract text from PDF online for free. Copy content or download a formatted PDF. Private browser extraction, no signup.",
     keywords: ["extract text from pdf", "pdf to text", "copy pdf text", "pdf text extractor"],
