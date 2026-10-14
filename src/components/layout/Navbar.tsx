@@ -64,7 +64,6 @@ export function Navbar() {
           : "bg-bg-primary"
       )}
     >
-      <div className="h-1.5 w-full bg-slate-900" aria-hidden />
       <div className="container-max section-pad flex h-14 sm:h-16 items-center justify-between gap-3 sm:gap-4">
         <Link
           href="/"
