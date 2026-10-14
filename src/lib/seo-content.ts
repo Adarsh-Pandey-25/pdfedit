@@ -66,8 +66,8 @@ export const TOOL_SEO: Record<ToolSlug, ToolSeoContent> = {
     featuresTitle: "PDF Editor Features",
     features: [
       "Add and style new text with fonts and colors",
-      "Highlight, underline, and annotate important sections",
-      "Insert signatures, shapes, arrows, and stamps",
+      "Highlight text and add notes to important sections",
+      "Insert signatures, images, shapes, lines, and arrows",
       "Works entirely in your browser — no server upload",
       "Free to use with no export watermarks",
     ],
@@ -239,7 +239,7 @@ export const TOOL_SEO: Record<ToolSlug, ToolSeoContent> = {
     features: [
       "Supports JPG, PNG, and WebP",
       "Combine multiple images into one PDF",
-      "Professional page layout options",
+      "Page size (A4, Letter, or custom), orientation, and margin options",
       "100% browser-based and private",
     ],
     faqs: [
@@ -250,6 +250,10 @@ export const TOOL_SEO: Record<ToolSlug, ToolSeoContent> = {
       {
         q: "Does it add anything to my pages?",
         a: "Yes. A small page number (for example, \"1 / 3\") is printed at the bottom of each page.",
+      },
+      {
+        q: "Can I choose the page size and orientation?",
+        a: "Yes. Choose A4, Letter, or a custom size in millimetres, switch between portrait and landscape, and set the page margin before you generate the PDF. Each image can be up to 50 MB.",
       },
     ],
     related: ["pdf-to-image", "merge", "compress"],
@@ -316,6 +320,10 @@ export const TOOL_SEO: Record<ToolSlug, ToolSeoContent> = {
       {
         q: "Can I use Markdown?",
         a: "Yes. Use headings, bullets, numbered lists, quotes, and code-style blocks for structure.",
+      },
+      {
+        q: "What page size and styles do I get?",
+        a: "Pages are A4. You can choose the Modern, Professional, Minimal, or Colorful theme, and bold, italic, and inline code text are supported.",
       },
     ],
     related: ["word-to-pdf", "edit", "merge"],
@@ -432,14 +440,19 @@ export const TOOL_SEO: Record<ToolSlug, ToolSeoContent> = {
     featuresTitle: "PDF Viewer Features",
     features: [
       "Fast in-browser rendering",
-      "Page navigation and zoom",
+      "Page navigation, zoom, and fit-to-width or fit-to-page",
       "Works on desktop and mobile",
+      "Search for a word or phrase across all pages",
       "Private local viewing",
     ],
     faqs: [
       {
         q: "Do I need to install software?",
         a: "No. The viewer runs in any modern web browser.",
+      },
+      {
+        q: "Can I search for text and open long documents?",
+        a: "Yes. Search looks through every page and tells you which pages contain the text; scanned pages without a text layer can't be searched. For long files, the thumbnail sidebar shows the first 40 pages, and you can still move through every page with the next and previous buttons.",
       },
     ],
     related: ["edit", "sign", "extract-text"],

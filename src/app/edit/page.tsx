@@ -7,7 +7,7 @@ import { EditPageLoading } from "@/components/shared/ToolPageLoading";
 
 const EditClient = dynamic(
   () => import("./EditClient").then((m) => m.EditClient),
-  { ssr: false, loading: () => <EditPageLoading /> }
+  { ssr: false, loading: () => <EditPageLoading compact /> }
 );
 
 export const metadata: Metadata = createToolMetadata("edit");

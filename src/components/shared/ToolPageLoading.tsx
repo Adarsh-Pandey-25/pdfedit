@@ -25,9 +25,21 @@ export function ToolPageLoading({ label = "Loading tool…" }: { label?: string 
   );
 }
 
-export function EditPageLoading() {
+/**
+ * `compact` is for the in-page placeholder shown while the editor bundle loads.
+ * It matches the height of the editor's first screen (the upload step: 233px
+ * below the `sm` breakpoint, 269px from it up) so the SEO text underneath the
+ * tool doesn't jump when the editor mounts. The full-height default stays for
+ * the route-level loading screen (`edit/loading.tsx`).
+ */
+export function EditPageLoading({ compact = false }: { compact?: boolean }) {
   return (
-    <div className="min-h-[70vh] animate-pulse" aria-busy="true">
+    <div
+      className={`animate-pulse ${
+        compact ? "h-[233px] sm:h-[269px] overflow-hidden" : "min-h-[70vh]"
+      }`}
+      aria-busy="true"
+    >
       <div className="border-b border-primary/10 bg-bg-card px-3 sm:px-4 py-3 flex items-center justify-between gap-2">
         <div className="h-6 w-40 sm:w-56 rounded-lg bg-primary/15" />
         <div className="flex gap-2">
