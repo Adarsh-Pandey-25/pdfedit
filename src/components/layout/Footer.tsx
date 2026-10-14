@@ -5,6 +5,12 @@ import { Share2, Globe, Mail, X } from "lucide-react";
 import { SITE_EMAIL, SITE_NAME, TOOLS } from "@/lib/constants";
 import { BrandLogo } from "@/components/layout/BrandLogo";
 
+const MORE_TOOLS = [
+  ...TOOLS.slice(6, 12),
+  // Unlock PDF sits after the first 12 tools, so it previously had no footer link.
+  ...TOOLS.filter((tool) => tool.slug === "unlock"),
+];
+
 export function Footer() {
   const year = new Date().getFullYear();
 
@@ -62,7 +68,7 @@ export function Footer() {
           <div>
             <h3 className="font-semibold mb-4 text-text-primary">More tools</h3>
             <ul className="space-y-2">
-              {TOOLS.slice(6, 12).map((tool) => (
+              {MORE_TOOLS.map((tool) => (
                 <li key={tool.slug}>
                   <Link
                     href={tool.href}
