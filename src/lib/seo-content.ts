@@ -55,13 +55,13 @@ export const TOOL_SEO: Record<ToolSlug, ToolSeoContent> = {
     keywords: ["edit pdf", "pdf editor", "add text to pdf", "annotate pdf", "sign pdf online"],
     h1: "Edit PDF Online Free",
     intro:
-      "Edit PDF files directly in your browser with PdfEdit+’s free online PDF editor. Add text, images, signatures, highlights, shapes, and annotations without installing software. Your documents stay private — all editing happens locally on your device. Ideal for contracts, forms, invoices, resumes, and everyday PDF documents.",
+      "Edit PDF files directly in your browser with PdfEdit+’s free online PDF editor. Add text, images, signatures, highlights, shapes, and annotations without installing software. Your documents stay private — all editing happens locally on your device. Ideal for contracts, invoices, resumes, and everyday PDF documents.",
     howToTitle: "How to Edit a PDF Online",
     steps: [
       "Upload your PDF by dragging it onto the page or choosing a file.",
       "Use the toolbar to add text, highlights, signatures, shapes, or images.",
-      "Click existing text where supported to adjust content and styling.",
-      "Download your edited PDF when you are finished.",
+      "To change existing text, choose Edit Text, then double-click the text.",
+      "Select Done, then choose Save as PDF or Searchable Text to download.",
     ],
     featuresTitle: "PDF Editor Features",
     features: [
@@ -84,14 +84,18 @@ export const TOOL_SEO: Record<ToolSlug, ToolSeoContent> = {
         q: "Do you upload my PDF?",
         a: "No. Editing runs locally in your browser so your file never leaves your device.",
       },
+      {
+        q: "Will the text stay selectable?",
+        a: "Choose Searchable Text to keep the original text layer. Save as PDF saves each page as an image, so its text can't be selected or searched.",
+      },
     ],
-    related: ["sign", "watermark", "merge"],
+    related: ["sign", "watermark", "unlock"],
   },
   merge: {
     slug: "merge",
     title: "Merge PDF Files Online Free",
     description:
-      "Merge multiple PDF files into one document online for free. Drag and drop to reorder pages. No signup, private browser processing.",
+      "Merge multiple PDF files into one document online for free. Drag and drop to reorder files. No signup, private browser processing.",
     keywords: ["merge pdf", "combine pdf", "join pdf", "pdf merger", "merge pdf free"],
     h1: "Merge PDF Files Online Free",
     intro:
@@ -134,8 +138,8 @@ export const TOOL_SEO: Record<ToolSlug, ToolSeoContent> = {
     howToTitle: "How to Split a PDF",
     steps: [
       "Upload the PDF you want to split.",
-      "Choose all pages or enter a custom page range.",
-      "Run the split to generate new PDF files.",
+      "Click the pages you want or type a range such as 1-3, 5.",
+      "Extract them into one PDF, or split every page into its own PDF (ZIP).",
       "Download your extracted pages.",
     ],
     featuresTitle: "Split PDF Features",
@@ -200,9 +204,9 @@ export const TOOL_SEO: Record<ToolSlug, ToolSeoContent> = {
     howToTitle: "How to Convert PDF to Images",
     steps: [
       "Upload your PDF file.",
-      "Choose image format and pages to export.",
+      "Choose PNG or JPG (and JPG quality).",
       "Render pages to images in your browser.",
-      "Download the image files.",
+      "Download all pages as a ZIP file.",
     ],
     featuresTitle: "PDF to Image Features",
     features: [
@@ -214,7 +218,7 @@ export const TOOL_SEO: Record<ToolSlug, ToolSeoContent> = {
     faqs: [
       {
         q: "What image formats are supported?",
-        a: "You can export common formats such as PNG and JPG depending on the tool options.",
+        a: "PNG or JPG. For JPG you can set the quality.",
       },
     ],
     related: ["image-to-pdf", "compress", "viewer"],
@@ -256,77 +260,86 @@ export const TOOL_SEO: Record<ToolSlug, ToolSeoContent> = {
         a: "Yes. Choose A4, Letter, or a custom size in millimetres, switch between portrait and landscape, and set the page margin before you generate the PDF. Each image can be up to 50 MB.",
       },
     ],
-    related: ["pdf-to-image", "merge", "compress"],
+    related: ["pdf-to-image", "word-to-pdf", "compress"],
   },
   "word-to-pdf": {
     slug: "word-to-pdf",
     title: "Word to PDF Converter Free",
     description:
-      "Convert Word DOCX documents to PDF online for free. Preserve structure with private browser conversion — no signup.",
+      "Convert Word .docx files to PDF online for free. Preview your document, choose a theme, and download an A4 PDF. Processed in your browser, no signup.",
     keywords: ["word to pdf", "docx to pdf", "convert word", "office to pdf"],
     h1: "Convert Word to PDF Online",
     intro:
-      "Convert DOCX Word documents into shareable PDFs with PdfEdit+. Headings, lists, and formatting are mapped into a clean PDF layout using our browser-based generator. Your document is not uploaded to a server.",
+      "Convert a Word .docx file into a clean PDF without installing anything. PdfEdit+ reads your document in your browser, shows a preview, and lets you pick a theme before it creates the PDF. Headings, paragraphs, lists, and bold and italic text are carried over. Images are left out, tables become plain text, and the original page layout is not kept. Your file is not uploaded to a server.",
     howToTitle: "How to Convert Word to PDF",
     steps: [
-      "Upload your .docx Word file.",
-      "Optionally choose a PDF theme or style.",
-      "Convert the document in your browser.",
+      "Upload a .docx Word file by dragging it in or choosing it from your device.",
+      "Check the preview to see the text, headings, and lists read from your document.",
+      "Choose a theme (Modern, Professional, Minimal, or Colorful), then select Convert to PDF.",
       "Download the finished PDF.",
     ],
     featuresTitle: "Word to PDF Features",
     features: [
-      "DOCX support with structured layout",
-      "Unicode-friendly fonts",
-      "Theme presets for professional output",
-      "Private local conversion",
+      "Reads .docx files in your browser (legacy .doc files are not accepted)",
+      "Preview of your document's content before you convert",
+      "Four themes: Modern, Professional, Minimal, and Colorful",
+      "Keeps headings, paragraphs, bullet and numbered lists, and bold and italic text",
+      "Handles accented letters and Greek text",
     ],
     faqs: [
       {
         q: "Does it support .doc files?",
-        a: "The converter focuses on modern DOCX files. Save older documents as DOCX before converting.",
+        a: "No. The uploader accepts .docx files only, not legacy .doc files. In Word, choose Save As, pick Word Document (.docx), and upload the new file.",
       },
       {
         q: "Are images and tables included?",
-        a: "Embedded images are not included, and tables are simplified into plain text. Headings, paragraphs, lists, and basic text formatting are converted.",
+        a: "No. Pictures may appear in the preview but are not included in the PDF. Tables are not kept as tables: their text is run together without rows, columns, or borders, so check any document that contains tables before you rely on the result.",
+      },
+      {
+        q: "What formatting is kept?",
+        a: "Headings (levels 4 to 6 are shown at the third heading level), paragraphs, bullet and numbered lists, and bold and italic text are kept. Nested list items are merged into their parent item. Underline, strikethrough, link formatting, colors, fonts, Word headers and footers, and page layout are not kept; the theme you choose sets the typography.",
+      },
+      {
+        q: "What does the finished PDF look like?",
+        a: "Pages are A4. The PDF starts with your file name as a title, followed by your content in the selected theme, and every page has a \"Page 1 of 3\"-style footer.",
       },
     ],
-    related: ["text-to-pdf", "merge", "compress"],
+    related: ["text-to-pdf", "image-to-pdf", "compress"],
   },
   "text-to-pdf": {
     slug: "text-to-pdf",
     title: "Text to PDF Online Free",
     description:
-      "Create a styled PDF from plain text or Markdown online for free. Themes, headings, lists, and Unicode — private in your browser.",
+      "Create a styled PDF from plain text or Markdown online for free. Color themes, headings, lists, and accented and Greek characters — private in your browser.",
     keywords: ["text to pdf", "markdown to pdf", "create pdf", "plain text pdf"],
     h1: "Create a PDF from Text Online",
     intro:
-      "Turn notes, Markdown, or plain text into a beautiful PDF. PdfEdit+ supports headings, lists, quotes, and Unicode characters with professional themes. Generation runs in your browser with embedded fonts.",
+      "Turn notes, Markdown, or plain text into a beautiful PDF. PdfEdit+ supports headings, lists, quotes, and accented and Greek characters, with four color themes. Generation runs in your browser with embedded fonts.",
     howToTitle: "How to Create a PDF from Text",
     steps: [
       "Paste or type your text (Markdown-style syntax supported).",
-      "Pick a theme for typography and colors.",
+      "Pick a color theme.",
       "Generate the PDF locally.",
       "Download your document.",
     ],
     featuresTitle: "Text to PDF Features",
     features: [
       "Markdown-like headings and lists",
-      "Unicode and special characters",
+      "Accented and Greek characters (emoji aren't supported)",
       "Multiple visual themes",
       "No signup required",
     ],
     faqs: [
       {
         q: "Can I use Markdown?",
-        a: "Yes. Use headings, bullets, numbered lists, quotes, and code-style blocks for structure.",
+        a: "Yes. Use headings, bullets, numbered lists, quotes, and code-style blocks for structure. A line written in ALL CAPS also becomes a heading, and lines without a blank line between them join into one paragraph.",
       },
       {
         q: "What page size and styles do I get?",
         a: "Pages are A4. You can choose the Modern, Professional, Minimal, or Colorful theme, and bold, italic, and inline code text are supported.",
       },
     ],
-    related: ["word-to-pdf", "edit", "merge"],
+    related: ["word-to-pdf", "edit", "extract-text"],
   },
   rotate: {
     slug: "rotate",
@@ -336,11 +349,11 @@ export const TOOL_SEO: Record<ToolSlug, ToolSeoContent> = {
     keywords: ["rotate pdf", "rotate pdf pages", "fix pdf orientation"],
     h1: "Rotate PDF Pages Online",
     intro:
-      "Fix PDF orientation in seconds. Rotate individual pages or the whole document left or right. PdfEdit+ applies rotations locally so scanned documents and exports stay private.",
+      "Fix PDF orientation in seconds. Rotate individual pages or the whole document clockwise by 90° or 180°. PdfEdit+ applies rotations locally so scanned documents and exports stay private.",
     howToTitle: "How to Rotate a PDF",
     steps: [
       "Upload your PDF.",
-      "Select pages and rotation angle.",
+      "Rotate any page by 90° or 180°, or rotate all pages at once.",
       "Apply the rotation in your browser.",
       "Download the corrected PDF.",
     ],
@@ -377,7 +390,7 @@ export const TOOL_SEO: Record<ToolSlug, ToolSeoContent> = {
     ],
     featuresTitle: "Watermark Features",
     features: [
-      "Text watermarks with font, size, bold, and italic options",
+      "Text watermarks with font and size options, plus bold and italic where the font supports them",
       "Opacity, angle, and color controls",
       "Nine placement positions, including corners and center",
       "Private local processing",
@@ -394,7 +407,7 @@ export const TOOL_SEO: Record<ToolSlug, ToolSeoContent> = {
     slug: "page-numbers",
     title: "Add Page Numbers to PDF Free",
     description:
-      "Add page numbers to PDF online for free. Choose position, format, and style. Private browser processing, no signup.",
+      "Add page numbers to PDF online for free. Choose position, number format, starting number, size, and color. Private browser processing, no signup.",
     keywords: ["add page numbers to pdf", "pdf pagination", "number pdf pages"],
     h1: "Add Page Numbers to PDF Online",
     intro:
@@ -410,16 +423,16 @@ export const TOOL_SEO: Record<ToolSlug, ToolSeoContent> = {
     features: [
       "Multiple positions (top/bottom, left/center/right)",
       "Custom start number and formats",
-      "Unicode-capable fonts",
+      "Adjustable font size and color",
       "No signup required",
     ],
     faqs: [
       {
         q: "Can I start numbering from a custom value?",
-        a: "Yes. Set the starting number when you need front matter excluded or continued sequences.",
+        a: "Yes. Set the first number, for example to continue from another document. Every page is numbered, including the first.",
       },
     ],
-    related: ["watermark", "merge", "split"],
+    related: ["watermark", "rotate", "split"],
   },
   viewer: {
     slug: "viewer",
@@ -469,14 +482,14 @@ export const TOOL_SEO: Record<ToolSlug, ToolSeoContent> = {
     howToTitle: "How to Protect a PDF",
     steps: [
       "Upload the PDF you want to lock.",
-      "Set a user password and optional permissions.",
+      "Set an open password, an owner password, or both, and choose whether printing, copying, and editing are allowed.",
       "Encrypt the file locally.",
       "Download the protected PDF.",
     ],
     featuresTitle: "PDF Protection Features",
     features: [
       "Password encryption",
-      "Permission controls where supported",
+      "Printing, copying, and editing permissions",
       "Local processing for privacy",
       "Free to use without an account",
     ],
@@ -484,6 +497,10 @@ export const TOOL_SEO: Record<ToolSlug, ToolSeoContent> = {
       {
         q: "Can I remove a password later?",
         a: "If you know the password, use the Unlock PDF tool to remove protection.",
+      },
+      {
+        q: "Do the permissions always apply?",
+        a: "Only when you set an owner password that is different from the open password. If you leave it empty, anyone who can open the file can also change it.",
       },
     ],
     related: ["unlock", "watermark", "sign"],
@@ -518,7 +535,7 @@ export const TOOL_SEO: Record<ToolSlug, ToolSeoContent> = {
       },
       {
         q: "Will the unlocked PDF keep selectable text?",
-        a: "No. The unlocked copy is rebuilt from high-quality page images, so text is not selectable or editable. Keep your original if you need the text layer.",
+        a: "No. The unlocked copy is rebuilt from page images, so text is not selectable or editable. Keep your original if you need the text layer.",
       },
     ],
     related: ["protect", "edit", "merge"],
@@ -535,9 +552,9 @@ export const TOOL_SEO: Record<ToolSlug, ToolSeoContent> = {
     howToTitle: "How to Sign a PDF",
     steps: [
       "Upload the PDF that needs a signature.",
-      "Create a signature by drawing, typing, or uploading an image.",
+      "Create a signature by drawing, typing, or uploading an image, then select Use this signature.",
       "Place and resize the signature on the page.",
-      "Download the signed PDF.",
+      "Select Apply & download.",
     ],
     featuresTitle: "Sign PDF Features",
     features: [
@@ -558,7 +575,7 @@ export const TOOL_SEO: Record<ToolSlug, ToolSeoContent> = {
     slug: "extract-text",
     title: "Extract Text from PDF – PDF to Text Free",
     description:
-      "Extract text from PDF online for free. Copy content or download a formatted PDF. Private browser extraction, no signup.",
+      "Extract text from PDF online for free. Copy it, download a .txt file, or save a formatted PDF. Private browser extraction, no signup.",
     keywords: ["extract text from pdf", "pdf to text", "copy pdf text", "pdf text extractor"],
     h1: "Extract Text from PDF Online",
     intro:
@@ -566,8 +583,8 @@ export const TOOL_SEO: Record<ToolSlug, ToolSeoContent> = {
     howToTitle: "How to Extract Text from a PDF",
     steps: [
       "Upload your PDF.",
-      "Extract text page by page in your browser.",
-      "Copy the text or download a formatted PDF.",
+      "The text is extracted automatically from every page.",
+      "Copy the text, download it as .txt, or save a formatted PDF.",
       "Use the content wherever you need it.",
     ],
     featuresTitle: "Extract Text Features",
@@ -581,6 +598,10 @@ export const TOOL_SEO: Record<ToolSlug, ToolSeoContent> = {
       {
         q: "Does it work on scanned PDFs?",
         a: "Scanned pages without a text layer may return little or no text. Use OCR software first for image-only scans.",
+      },
+      {
+        q: "Is the layout kept?",
+        a: "No. Text from each page is joined into one block, so line breaks, columns, and tables aren't preserved.",
       },
     ],
     related: ["edit", "text-to-pdf", "viewer"],
