@@ -9,7 +9,7 @@ import { StepIndicator } from "@/components/shared/StepIndicator";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { loadPdfDocument, renderPageToCanvas } from "@/lib/pdf/pdfjs";
-import { downloadBlob, formatBytes, percentReduction, cn, pdfBlob } from "@/lib/utils";
+import { downloadBlob, formatBytes, compareFileSizes, cn, pdfBlob } from "@/lib/utils";
 import { useConfetti } from "@/hooks/useConfetti";
 
 type Level = "low" | "medium" | "high";
@@ -53,8 +53,12 @@ export function CompressClient() {
         const dataUrl = canvas.toDataURL("image/jpeg", cfg.quality);
         const jpgBytes = await fetch(dataUrl).then((r) => r.arrayBuffer());
         const img = await out.embedJpg(jpgBytes);
-        const page = out.addPage([img.width, img.height]);
-        page.drawImage(img, { x: 0, y: 0, width: img.width, height: img.height });
+        // Size the page in PDF points from the source's visible page (scale-1
+        // viewport, rotation applied) — not from the image's pixel count, which
+        // is the page size × cfg.scale.
+        const { width, height } = (await srcDoc.getPage(i)).getViewport({ scale: 1 });
+        const page = out.addPage([width, height]);
+        page.drawImage(img, { x: 0, y: 0, width, height });
         setProgress(Math.round((i / total) * 90));
       }
 
@@ -63,8 +67,15 @@ export function CompressClient() {
       const blob = pdfBlob(bytes);
       setResult(blob);
       setProgress(100);
-      confetti();
-      toast.success("Compression complete!");
+      const change = compareFileSizes(buffer.byteLength, blob.size);
+      if (change.kind === "smaller") {
+        confetti();
+        toast.success("Compression complete!");
+      } else if (change.kind === "larger") {
+        toast("The compressed file is larger. Keep your original.");
+      } else {
+        toast("Done. The file size didn't go down.");
+      }
     } catch (e) {
       console.error(e);
       toast.error("Compression failed");
@@ -74,8 +85,7 @@ export function CompressClient() {
   };
 
   const step = result ? 2 : buffer ? 1 : 0;
-  const reduction =
-    file && result ? percentReduction(file.size, result.size) : 0;
+  const change = file && result ? compareFileSizes(file.size, result.size) : null;
 
   return (
     <>
@@ -140,9 +150,26 @@ export function CompressClient() {
       {result && file && (
         <div className="mt-8 text-center space-y-3">
           <p className="text-sm text-text-secondary">
-            Compressed: {formatBytes(result.size)} ·{" "}
-            <span className="text-emerald-600 font-semibold">{reduction}% smaller</span>
+            Compressed: {formatBytes(result.size)}
+            {change?.kind === "smaller" && (
+              <>
+                {" "}·{" "}
+                <span className="text-emerald-600 font-semibold">{change.percent}% smaller</span>
+              </>
+            )}
+            {change?.kind === "larger" && (
+              <>
+                {" "}·{" "}
+                <span className="text-amber-700 font-semibold">{change.percent}% larger</span>
+              </>
+            )}
+            {change?.kind === "same" && <> · Same size as the original</>}
           </p>
+          {change?.kind === "larger" && (
+            <p className="text-sm text-text-secondary">
+              This PDF didn&apos;t get smaller. Keep your original file.
+            </p>
+          )}
           <DownloadButton
             onClick={() => downloadBlob(result, `compressed-${file.name}`)}
             filename={`compressed-${file.name}`}

@@ -500,7 +500,7 @@ export const TOOL_SEO: Record<ToolSlug, ToolSeoContent> = {
       },
       {
         q: "Do the permissions always apply?",
-        a: "Only when you set an owner password that is different from the open password. If you leave it empty, anyone who can open the file can also change it.",
+        a: "Not everywhere. Standard PDF viewers respect them, but some software can ignore them. If you leave the owner password blank, a separate random owner password is created, so the open password can't remove the restrictions. If you enter the same password in both fields, anyone who knows it can remove them.",
       },
     ],
     related: ["unlock", "watermark", "sign"],

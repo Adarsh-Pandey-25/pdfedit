@@ -35,3 +35,30 @@ export function percentReduction(original: number, compressed: number): number {
   if (original <= 0) return 0;
   return Math.max(0, Math.round(((original - compressed) / original) * 100));
 }
+
+export type SizeChange =
+  | { kind: "smaller" | "larger"; percent: string }
+  | { kind: "same" | "unknown" };
+
+/**
+ * Compares an output size with the original. `percent` is the change relative
+ * to the original, rounded, never shown as 0 or 100 when the true value isn't.
+ */
+export function compareFileSizes(original: number, output: number): SizeChange {
+  if (
+    !Number.isFinite(original) ||
+    !Number.isFinite(output) ||
+    original <= 0 ||
+    output < 0
+  ) {
+    return { kind: "unknown" };
+  }
+  if (output === original) return { kind: "same" };
+  const kind = output < original ? "smaller" : "larger";
+  const exact = (Math.abs(original - output) / original) * 100;
+  const rounded = Math.round(exact);
+  let percent = rounded.toLocaleString("en-US");
+  if (rounded < 1) percent = "<1";
+  else if (kind === "smaller" && rounded >= 100) percent = ">99";
+  return { kind, percent };
+}

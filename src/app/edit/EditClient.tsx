@@ -1121,22 +1121,24 @@ export function EditClient() {
                     Text remains searchable; positions may vary slightly.
                   </span>
                 </button>
-                <button
-                  type="button"
-                  className="w-full text-left px-3 py-2 rounded-md hover:bg-primary/10 border-t border-orange-200/40 mt-1 pt-2"
-                  onClick={() => {
-                    addExportTestRect(page - 1);
-                    setExportMenuOpen(false);
-                    toast.success(
-                      "Test kit added (debug logging on). Download to verify positions."
-                    );
-                  }}
-                >
-                  <span className="font-medium text-red-600">Add coordinate test kit</span>
-                  <span className="block text-[10px] text-text-secondary">
-                    Highlight, rect, line, pencil, text at known positions
-                  </span>
-                </button>
+                {process.env.NODE_ENV !== "production" && (
+                  <button
+                    type="button"
+                    className="w-full text-left px-3 py-2 rounded-md hover:bg-primary/10 border-t border-orange-200/40 mt-1 pt-2"
+                    onClick={() => {
+                      addExportTestRect(page - 1);
+                      setExportMenuOpen(false);
+                      toast.success(
+                        "Test kit added (debug logging on). Download to verify positions."
+                      );
+                    }}
+                  >
+                    <span className="font-medium text-red-600">Add coordinate test kit</span>
+                    <span className="block text-[10px] text-text-secondary">
+                      Highlight, rect, line, pencil, text at known positions
+                    </span>
+                  </button>
+                )}
               </div>
             )}
           </div>
@@ -1256,9 +1258,11 @@ export function EditClient() {
             active={tool === "edit-text"}
             label={fontsReady ? "Edit Text" : "Fonts…"}
             tip={
-              fontsReady
-                ? "Double-click text to edit (right-click: patch/font debug)"
-                : "Loading fonts…"
+              !fontsReady
+                ? "Loading fonts…"
+                : process.env.NODE_ENV !== "production"
+                  ? "Double-click text to edit (right-click: patch/font debug)"
+                  : "Double-click text to edit"
             }
             disabled={!fontsReady}
             onClick={async () => {
@@ -1280,16 +1284,20 @@ export function EditClient() {
                 }
               }
             }}
-            onContextMenu={(e) => {
-              e.preventDefault();
-              setDebugPatches((v) => {
-                const next = !v;
-                toast(next ? "Patch + font debug ON" : "Patch + font debug OFF", {
-                  id: "patch-debug",
-                });
-                return next;
-              });
-            }}
+            onContextMenu={
+              process.env.NODE_ENV !== "production"
+                ? (e) => {
+                    e.preventDefault();
+                    setDebugPatches((v) => {
+                      const next = !v;
+                      toast(next ? "Patch + font debug ON" : "Patch + font debug OFF", {
+                        id: "patch-debug",
+                      });
+                      return next;
+                    });
+                  }
+                : undefined
+            }
           >
             <SquarePen className="h-4 w-4" />
           </ToolBtn>

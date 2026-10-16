@@ -10,7 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
-import { protectPdf } from "@/lib/pdf/operations";
+import { ProtectInputError, protectPdf } from "@/lib/pdf/operations";
 import { downloadBlob , pdfBlob} from "@/lib/utils";
 import { useConfetti } from "@/hooks/useConfetti";
 
@@ -38,6 +38,7 @@ export function ProtectClient() {
       toast.error("Set at least one password");
       return;
     }
+    setResult(null);
     setProcessing(true);
     setProgress(40);
     try {
@@ -51,8 +52,12 @@ export function ProtectClient() {
       confetti();
       toast.success("PDF protected!");
     } catch (e) {
-      console.error(e);
-      toast.error("Encryption failed. Try a different PDF.");
+      if (e instanceof ProtectInputError) {
+        toast.error(e.message);
+      } else {
+        console.error(e);
+        toast.error("Encryption failed. Try a different PDF.");
+      }
     } finally {
       setProcessing(false);
     }
@@ -107,6 +112,11 @@ export function ProtectClient() {
               </label>
             ))}
           </fieldset>
+          <p className="text-xs text-text-secondary">
+            If you leave the owner password blank, a random one is used, so the
+            permissions can&apos;t be removed with the open password. Standard PDF
+            viewers respect these permissions, but some software can ignore them.
+          </p>
           <div className="flex gap-2">
             <Button onClick={protect}>Encrypt & protect</Button>
             <Button variant="outline" onClick={() => { setBuffer(null); setResult(null); }}>

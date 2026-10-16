@@ -9,16 +9,23 @@ import { StepIndicator } from "@/components/shared/StepIndicator";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { addPageNumbers, type PageNumberOptions } from "@/lib/pdf/operations";
+import {
+  addPageNumbers,
+  PageNumberInputError,
+  parsePageNumberStart,
+  type PageNumberOptions,
+} from "@/lib/pdf/operations";
 import { downloadBlob , pdfBlob} from "@/lib/utils";
 import { useConfetti } from "@/hooks/useConfetti";
 
 export function PageNumbersClient() {
   const [buffer, setBuffer] = useState<ArrayBuffer | null>(null);
+  const [pageCount, setPageCount] = useState<number | null>(null);
   const [position, setPosition] =
     useState<PageNumberOptions["position"]>("bottom-center");
   const [format, setFormat] = useState<PageNumberOptions["format"]>("numeric");
-  const [start, setStart] = useState(1);
+  const [startText, setStartText] = useState("1");
+  const [startError, setStartError] = useState<string | null>(null);
   const [fontSize, setFontSize] = useState(12);
   const [color, setColor] = useState("#431407");
   const [processing, setProcessing] = useState(false);
@@ -27,20 +34,37 @@ export function PageNumbersClient() {
   const confetti = useConfetti();
 
   const onFiles = useCallback(async (files: File[]) => {
-    setBuffer(await files[0].arrayBuffer());
+    const buf = await files[0].arrayBuffer();
+    let count: number | null = null;
+    try {
+      const { PDFDocument } = await import("pdf-lib");
+      count = (await PDFDocument.load(buf, { ignoreEncryption: true })).getPageCount();
+    } catch {
+      // addPageNumbers loads it again and reports the failure.
+    }
+    setPageCount(count);
+    setBuffer(buf);
     setResult(null);
+    setStartError(null);
     toast.success("PDF loaded");
   }, []);
 
   const apply = async () => {
     if (!buffer) return;
+    const parsed = parsePageNumberStart(startText, format, pageCount ?? 1);
+    if ("error" in parsed) {
+      setStartError(parsed.error);
+      setResult(null);
+      return;
+    }
+    setStartError(null);
     setProcessing(true);
     setProgress(40);
     try {
       const bytes = await addPageNumbers(buffer, {
         position,
         format,
-        start,
+        start: parsed.value,
         fontSize,
         color,
       });
@@ -48,8 +72,13 @@ export function PageNumbersClient() {
       setResult(pdfBlob(bytes));
       confetti();
       toast.success("Page numbers added!");
-    } catch {
-      toast.error("Failed to add page numbers");
+    } catch (e) {
+      if (e instanceof PageNumberInputError) {
+        setStartError(e.message);
+        setResult(null);
+      } else {
+        toast.error("Failed to add page numbers");
+      }
     } finally {
       setProcessing(false);
     }
@@ -96,9 +125,10 @@ export function PageNumbersClient() {
               id="fmt"
               className="mt-1.5 w-full h-11 rounded-xl border border-primary/20 bg-bg-card px-3 text-sm"
               value={format}
-              onChange={(e) =>
-                setFormat(e.target.value as PageNumberOptions["format"])
-              }
+              onChange={(e) => {
+                setFormat(e.target.value as PageNumberOptions["format"]);
+                setStartError(null);
+              }}
             >
               <option value="numeric">1, 2, 3</option>
               <option value="page-n">Page 1, Page 2</option>
@@ -112,9 +142,19 @@ export function PageNumbersClient() {
                 id="start"
                 type="number"
                 className="mt-1.5"
-                value={start}
-                onChange={(e) => setStart(Number(e.target.value) || 1)}
+                value={startText}
+                onChange={(e) => {
+                  setStartText(e.target.value);
+                  setStartError(null);
+                }}
+                aria-invalid={startError ? true : undefined}
+                aria-describedby={startError ? "start-error" : undefined}
               />
+              {startError && (
+                <p id="start-error" role="alert" className="mt-1 text-xs text-red-600">
+                  {startError}
+                </p>
+              )}
             </div>
             <div>
               <Label htmlFor="size">Size</Label>

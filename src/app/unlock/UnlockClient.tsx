@@ -53,8 +53,12 @@ export function UnlockClient() {
         const dataUrl = canvas.toDataURL("image/jpeg", 0.92);
         const jpg = await fetch(dataUrl).then((r) => r.arrayBuffer());
         const img = await out.embedJpg(jpg);
-        const page = out.addPage([img.width, img.height]);
-        page.drawImage(img, { x: 0, y: 0, width: img.width, height: img.height });
+        // Size the page in PDF points from the source's visible page (scale-1
+        // viewport, rotation applied) — not from the image's pixel count, which
+        // is the page size × 1.5.
+        const { width, height } = (await doc.getPage(i)).getViewport({ scale: 1 });
+        const page = out.addPage([width, height]);
+        page.drawImage(img, { x: 0, y: 0, width, height });
         setProgress(30 + Math.round((i / doc.numPages) * 60));
       }
       await doc.cleanup();
