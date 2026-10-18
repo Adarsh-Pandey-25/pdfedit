@@ -235,7 +235,7 @@ export const TOOL_SEO: Record<ToolSlug, ToolSeoContent> = {
     howToTitle: "How to Convert Images to PDF",
     steps: [
       "Upload one or more images.",
-      "Reorder images if needed.",
+      "Drag the image thumbnails to change their order.",
       "Generate the PDF in your browser.",
       "Download your new PDF file.",
     ],
@@ -258,6 +258,14 @@ export const TOOL_SEO: Record<ToolSlug, ToolSeoContent> = {
       {
         q: "Can I choose the page size and orientation?",
         a: "Yes. Choose A4, Letter, or a custom size in millimetres, switch between portrait and landscape, and set the page margin before you generate the PDF. Each image can be up to 50 MB.",
+      },
+      {
+        q: "Does converting reduce image quality?",
+        a: "No. JPG and PNG images are placed in the PDF as they are, without being re-compressed. WebP images are first converted to PNG, which keeps their quality but can make the PDF noticeably larger than the original WebP files.",
+      },
+      {
+        q: "How are images placed on each page?",
+        a: "Each image gets its own page. It is scaled to fit inside the margins, kept in proportion, and centred, so it is never cropped or stretched. Small images are enlarged to fill the space and can look soft, so use the largest version of an image you have, or increase the margin to keep it smaller on the page.",
       },
     ],
     related: ["pdf-to-image", "word-to-pdf", "compress"],
@@ -317,22 +325,28 @@ export const TOOL_SEO: Record<ToolSlug, ToolSeoContent> = {
       "Turn notes, Markdown, or plain text into a beautiful PDF. PdfEdit+ supports headings, lists, quotes, and accented and Greek characters, with four color themes. Generation runs in your browser with embedded fonts.",
     howToTitle: "How to Create a PDF from Text",
     steps: [
-      "Paste or type your text (Markdown-style syntax supported).",
-      "Pick a color theme.",
-      "Generate the PDF locally.",
-      "Download your document.",
+      "Enter a document title. It becomes the heading at the top of the PDF and the name of the downloaded file.",
+      "Pick a theme: Modern, Professional, Minimal, or Colorful.",
+      "Paste or type your text, using Markdown-style syntax for headings, lists, and quotes if you like.",
+      "Select Create PDF, then download your document.",
     ],
     featuresTitle: "Text to PDF Features",
     features: [
-      "Markdown-like headings and lists",
+      "Headings with #, ##, and ###, plus bullet and numbered lists",
+      "Quotes, fenced code blocks, and --- dividers",
+      "Bold, italic, and inline code formatting",
       "Accented and Greek characters (emoji aren't supported)",
-      "Multiple visual themes",
+      "Four themes: Modern, Professional, Minimal, and Colorful",
       "No signup required",
     ],
     faqs: [
       {
-        q: "Can I use Markdown?",
-        a: "Yes. Use headings, bullets, numbered lists, quotes, and code-style blocks for structure. A line written in ALL CAPS also becomes a heading, and lines without a blank line between them join into one paragraph.",
+        q: "Which Markdown syntax works?",
+        a: "Start a line with #, ##, or ### followed by a space for three heading levels. Start lines with -, *, •, or → for bullets, or with 1. or 1) for a numbered list. Begin a line with > for a quote, put code between two lines of three backticks (```), and use --- on its own line for a divider. Inside text, **bold**, *italic*, ***bold italic***, and `inline code` work. A short line written in ALL CAPS also becomes a heading, and lines without a blank line between them join into one paragraph.",
+      },
+      {
+        q: "What isn't supported?",
+        a: "Links and images are printed as plain text, exactly as you typed them. Tables aren't laid out: their rows run together into one paragraph. Deeper headings such as #### and lines starting with + are shown as ordinary text, and indented sub-items become regular items in the same list. Emoji aren't supported.",
       },
       {
         q: "What page size and styles do I get?",
