@@ -7,9 +7,12 @@ import {
   HowToSchema,
 } from "@/components/seo/StructuredData";
 import { SITE_URL } from "@/lib/constants";
+import { GUIDES } from "@/lib/guides";
+import { A } from "@/components/guides/GuideProse";
 
 export function ToolSeoContent({ slug }: { slug: ToolSlug }) {
   const seo = getToolSeo(slug);
+  const guide = GUIDES.find((g) => g.tool === slug);
   const related = seo.related
     .map((s) => getTool(s))
     .filter(Boolean) as NonNullable<ReturnType<typeof getTool>>[];
@@ -51,6 +54,13 @@ export function ToolSeoContent({ slug }: { slug: ToolSlug }) {
             <li key={step}>{step}</li>
           ))}
         </ol>
+        {guide && (
+          <p className="mt-4 text-text-secondary text-[15px] leading-relaxed">
+            Want more detail?{" "}
+            <A href={`/guides/${guide.slug}`}>{guide.toolLinkText}</A> step by
+            step, including what to check before you share the result.
+          </p>
+        )}
       </section>
 
       <section aria-labelledby={`${slug}-features-heading`} className="max-w-3xl">

@@ -127,7 +127,7 @@ export function CompressClient() {
               ))}
             </div>
             <p className="mt-2 text-xs text-text-secondary">
-              Higher compression rebuilds pages as images for smaller files (may reduce sharpness).
+              Every compression level rebuilds pages as images. Higher compression levels create smaller files but may reduce sharpness.
             </p>
           </div>
 

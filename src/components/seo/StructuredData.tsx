@@ -156,3 +156,38 @@ export function HowToSchema({
     />
   );
 }
+
+/** Guide articles. Author and publisher are the site itself (no named authors). */
+export function ArticleSchema({
+  headline,
+  description,
+  url,
+  datePublished,
+  dateModified,
+}: {
+  headline: string;
+  description: string;
+  url: string;
+  datePublished: string;
+  dateModified: string;
+}) {
+  const site = { "@type": "Organization", name: SITE_NAME, url: SITE_URL };
+  return (
+    <JsonLd
+      data={{
+        "@context": "https://schema.org",
+        "@type": "Article",
+        headline,
+        description,
+        url,
+        mainEntityOfPage: { "@type": "WebPage", "@id": url },
+        image: `${SITE_URL}/og-image.png`,
+        datePublished,
+        dateModified,
+        inLanguage: "en",
+        author: site,
+        publisher: { ...site, logo: { "@type": "ImageObject", url: `${SITE_URL}/icon-512.png` } },
+      }}
+    />
+  );
+}
