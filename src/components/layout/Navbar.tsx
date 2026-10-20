@@ -14,6 +14,7 @@ const navLinks = [
   { href: "/#tools", label: "Tools" },
   { href: "/#how-it-works", label: "How it works" },
   { href: "/#faq", label: "FAQ" },
+  { href: "/guides", label: "Guides" },
 ];
 
 export function Navbar() {
