@@ -1,9 +1,14 @@
 import fontkit from "@pdf-lib/fontkit";
 import {
   PDFDocument,
+  PDFImage,
   PDFPage,
   PDFFont,
   PageSizes,
+  concatTransformationMatrix,
+  drawObject,
+  popGraphicsState,
+  pushGraphicsState,
   rgb,
 } from "pdf-lib";
 import {
@@ -20,6 +25,7 @@ import {
   PdfThemeName,
   THEMES,
 } from "./pdf-themes";
+import { prepareJpegForPdf } from "./jpeg-orientation";
 
 export type PdfFonts = {
   regular: PDFFont;
@@ -640,6 +646,38 @@ export type ImagePdfOptions = {
   showFooter?: boolean;
 };
 
+/**
+ * Draws a JPEG upright in the box {x, y, width, height} (its shown size)
+ * according to its EXIF orientation, using a transformation matrix, so the
+ * image data is embedded unchanged. Each matrix maps the image's unit square
+ * (stored top-left at 0,1) to the box.
+ */
+function drawOrientedImage(
+  page: PDFPage,
+  image: PDFImage,
+  exifOrientation: number,
+  box: { x: number; y: number; width: number; height: number }
+) {
+  const { x, y, width: w, height: h } = box;
+  const matrices: Record<number, [number, number, number, number, number, number]> = {
+    2: [-w, 0, 0, h, x + w, y], // mirrored horizontally
+    3: [-w, 0, 0, -h, x + w, y + h], // rotated 180°
+    4: [w, 0, 0, -h, x, y + h], // mirrored vertically
+    5: [0, -h, -w, 0, x + w, y + h], // mirrored, then rotated 90° anticlockwise
+    6: [0, -h, w, 0, x, y + h], // needs 90° clockwise turn
+    7: [0, h, w, 0, x, y], // mirrored, then rotated 90° clockwise
+    8: [0, h, -w, 0, x + w, y], // needs 90° anticlockwise turn
+  };
+  const [a, b, c, d, e, f] = matrices[exifOrientation];
+  const name = page.node.newXObject("Image", image.ref);
+  page.pushOperators(
+    pushGraphicsState(),
+    concatTransformationMatrix(a, b, c, d, e, f),
+    drawObject(name),
+    popGraphicsState()
+  );
+}
+
 export async function generateImagePdf(
   images: PdfImageInput[],
   options: ImagePdfOptions = {}
@@ -661,26 +699,33 @@ export async function generateImagePdf(
   const margin = Math.max(0, options.marginPt ?? 40);
   for (let index = 0; index < images.length; index++) {
     const input = images[index];
-    const embedded =
-      input.mimeType === "image/png"
-        ? await doc.embedPng(input.bytes)
-        : await doc.embedJpg(input.bytes);
+    let embedded: PDFImage;
+    let exifOrientation = 1;
+    if (input.mimeType === "image/png") {
+      embedded = await doc.embedPng(input.bytes);
+    } else {
+      const jpeg = prepareJpegForPdf(input.bytes);
+      exifOrientation = jpeg.orientation;
+      embedded = await doc.embedJpg(jpeg.bytes);
+    }
     const page = doc.addPage(baseSize);
     const footerSpace = options.showFooter === false ? 0 : 22;
     const maxWidth = baseSize[0] - margin * 2;
     const maxHeight = baseSize[1] - margin * 2 - footerSpace;
-    const scale = Math.min(
-      maxWidth / embedded.width,
-      maxHeight / embedded.height
-    );
-    const width = embedded.width * scale;
-    const height = embedded.height * scale;
-    page.drawImage(embedded, {
-      x: (baseSize[0] - width) / 2,
-      y: margin + footerSpace + (maxHeight - height) / 2,
-      width,
-      height,
-    });
+    // EXIF orientations 5–8 turn the photo a quarter turn, swapping its sides.
+    const swapSides = exifOrientation >= 5;
+    const shownWidth = swapSides ? embedded.height : embedded.width;
+    const shownHeight = swapSides ? embedded.width : embedded.height;
+    const scale = Math.min(maxWidth / shownWidth, maxHeight / shownHeight);
+    const width = shownWidth * scale;
+    const height = shownHeight * scale;
+    const x = (baseSize[0] - width) / 2;
+    const y = margin + footerSpace + (maxHeight - height) / 2;
+    if (exifOrientation === 1) {
+      page.drawImage(embedded, { x, y, width, height });
+    } else {
+      drawOrientedImage(page, embedded, exifOrientation, { x, y, width, height });
+    }
 
     if (options.showFooter !== false) {
       const label = `${index + 1} / ${images.length}`;

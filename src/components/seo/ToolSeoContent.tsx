@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { getTool, type ToolSlug } from "@/lib/constants";
-import { getToolSeo } from "@/lib/seo-content";
+import { getToolSeo, type SeoRichText } from "@/lib/seo-content";
 import {
   BreadcrumbSchema,
   FAQSchema,
@@ -9,6 +9,21 @@ import {
 import { SITE_URL } from "@/lib/constants";
 import { GUIDES } from "@/lib/guides";
 import { A } from "@/components/guides/GuideProse";
+
+/** Section text, with each `links[].text` (first occurrence) as a link. */
+function RichText({ value }: { value: SeoRichText }) {
+  if (typeof value === "string") return <>{value}</>;
+  const parts: React.ReactNode[] = [];
+  let rest = value.text;
+  value.links.forEach((link, i) => {
+    const at = rest.indexOf(link.text);
+    if (at < 0) return;
+    parts.push(rest.slice(0, at), <A key={i} href={link.href}>{link.text}</A>);
+    rest = rest.slice(at + link.text.length);
+  });
+  parts.push(rest);
+  return <>{parts}</>;
+}
 
 export function ToolSeoContent({ slug }: { slug: ToolSlug }) {
   const seo = getToolSeo(slug);
@@ -76,6 +91,46 @@ export function ToolSeoContent({ slug }: { slug: ToolSlug }) {
           ))}
         </ul>
       </section>
+
+      {seo.sections?.map((section) => (
+        <section
+          key={section.id}
+          aria-labelledby={`${slug}-${section.id}-heading`}
+          className="max-w-3xl"
+        >
+          <h2
+            id={`${slug}-${section.id}-heading`}
+            className="text-2xl font-bold tracking-tight text-text-primary"
+          >
+            {section.heading}
+          </h2>
+          {section.paragraphs?.map((p, i) => (
+            <p
+              key={i}
+              className="mt-4 text-text-secondary text-[15px] leading-relaxed"
+            >
+              <RichText value={p} />
+            </p>
+          ))}
+          {section.items && (
+            <ul className="mt-4 space-y-2 list-disc pl-5 text-text-secondary text-[15px] leading-relaxed">
+              {section.items.map((item, i) => (
+                <li key={i}>
+                  <RichText value={item} />
+                </li>
+              ))}
+            </ul>
+          )}
+          {section.subsections?.map((sub) => (
+            <div key={sub.heading} className="mt-5">
+              <h3 className="font-semibold text-text-primary">{sub.heading}</h3>
+              <p className="mt-1 text-text-secondary text-[15px] leading-relaxed">
+                <RichText value={sub.text} />
+              </p>
+            </div>
+          ))}
+        </section>
+      ))}
 
       <section aria-labelledby={`${slug}-faq-heading`} className="max-w-3xl">
         <h2

@@ -2,6 +2,22 @@ import type { ToolSlug } from "@/lib/constants";
 
 export type FaqItem = { q: string; a: string };
 
+/** Plain text, or text where each `links[].text` (which must appear in `text`) becomes a link. */
+export type SeoRichText =
+  | string
+  | { text: string; links: { text: string; href: string }[] };
+
+/** Optional extra section on a tool page, rendered between Features and the FAQ. */
+export type ToolSeoSection = {
+  /** Used for the section's id; keep it unique within the page. */
+  id: string;
+  heading: string;
+  paragraphs?: SeoRichText[];
+  items?: SeoRichText[];
+  /** Rendered as H3 + paragraph pairs (for example, troubleshooting). */
+  subsections?: { heading: string; text: SeoRichText }[];
+};
+
 export type ToolSeoContent = {
   slug: ToolSlug;
   /** Page <title> segment (layout appends | PdfEdit+). Keep ~45 chars. */
@@ -15,6 +31,7 @@ export type ToolSeoContent = {
   steps: string[];
   featuresTitle: string;
   features: string[];
+  sections?: ToolSeoSection[];
   faqs: FaqItem[];
   related: ToolSlug[];
 };
@@ -241,48 +258,143 @@ export const TOOL_SEO: Record<ToolSlug, ToolSeoContent> = {
     slug: "image-to-pdf",
     title: "JPG to PDF – Convert Images to PDF Free",
     description:
-      "Convert JPG, PNG, and WebP images to PDF online for free. Combine multiple images into one PDF privately in your browser.",
-    keywords: ["image to pdf", "jpg to pdf", "png to pdf", "convert images to pdf"],
+      "Convert JPG, PNG, and WebP images to one PDF for free. Arrange the pages, choose A4, Letter, or a custom size, and download. Made in your browser, no signup.",
+    keywords: ["image to pdf", "jpg to pdf", "png to pdf", "webp to pdf", "convert images to pdf"],
     h1: "Convert Images to PDF Online",
     intro:
-      "Create a polished PDF from your photos or screenshots. Upload JPG, PNG, or WebP files, arrange them, and download a single PDF. PdfEdit+ builds the document locally so your images stay on your device.",
+      "Turn photos, scans, and screenshots into a single PDF. Add JPG, PNG, or WebP images, put them in the order you want, choose the page size, orientation, and margin, then download one PDF with one image per page. The PDF is built in your browser, so your images are not uploaded to a server and you don't need an account.",
     howToTitle: "How to Convert Images to PDF",
     steps: [
-      "Upload one or more images.",
-      "Drag the image thumbnails to change their order.",
-      "Generate the PDF in your browser.",
-      "Download your new PDF file.",
+      "Drop your JPG, PNG, or WebP images into the upload area, or select the upload area to choose them from your device. You can add more images at any time; new ones are added to the end.",
+      "Drag the thumbnails, or use the arrow buttons under each one, to put the images in order. The number on each thumbnail is its page number in the PDF, and the bin icon removes an image.",
+      "Choose the page size (A4, Letter, or a custom size in millimetres), the orientation, and the margin.",
+      "Select Convert to PDF, then select Download to save the file (named images.pdf).",
     ],
     featuresTitle: "Image to PDF Features",
     features: [
-      "Supports JPG, PNG, and WebP",
-      "Combine multiple images into one PDF",
-      "Page size (A4, Letter, or custom), orientation, and margin options",
-      "100% browser-based and private",
+      "Accepts JPG, PNG, and WebP images up to 50 MB each",
+      "Combines several images into one PDF, one image per page",
+      "Set the page order by dragging or with arrow buttons that work with touch and keyboard",
+      "JPG phone photos are turned upright using the rotation saved by the camera",
+      "A4, Letter, or custom page size, portrait or landscape, and an adjustable margin",
+      "Each image is scaled to fit its page and centred, never cropped or stretched",
+      "Created in your browser, with no upload and no signup",
+    ],
+    sections: [
+      {
+        id: "formats",
+        heading: "Supported image formats",
+        paragraphs: [
+          "You can add .jpg, .jpeg, .png, and .webp files. JPG images are placed in the PDF without being re-compressed, and PNG images are stored without any loss of quality. WebP images are converted to PNG first. This keeps their quality, but the PDF can be noticeably larger than the original WebP files. Transparent areas in PNG images show the white page behind them.",
+          "Other formats, including HEIC, GIF, BMP, TIFF, and SVG, are not accepted and show an \"Unsupported file type.\" message. If you add a mix of files, the supported images are still added. iPhone photos are often saved as HEIC, so export or share them as JPG first.",
+          {
+            text: "Converting a document rather than pictures? Use Word to PDF for .docx files or Text to PDF for plain text.",
+            links: [
+              { text: "Word to PDF", href: "/word-to-pdf" },
+              { text: "Text to PDF", href: "/text-to-pdf" },
+            ],
+          },
+        ],
+      },
+      {
+        id: "layout",
+        heading: "Page size, orientation, and margins",
+        paragraphs: [
+          "Every page in the PDF uses the same size and orientation. A4 is 210 × 297 mm and Letter is 8.5 × 11 inches. Custom lets you type a width and height in millimetres. Portrait always makes the longer side vertical and landscape makes it horizontal, including for custom sizes.",
+          "The margin is the empty space kept around each image, 20 mm by default. Set it to 0 to make images as large as possible. Each image is then scaled up or down to fit inside the margins, kept in proportion, and centred on its page. A small page number such as \"2 / 5\" is printed at the bottom of every page, and a narrow strip is kept free for it.",
+        ],
+      },
+      {
+        id: "uses",
+        heading: "What you can use it for",
+        items: [
+          "Combining photos of receipts, forms, or ID documents into one PDF to email or upload",
+          "Turning screenshots into a PDF you can share or print",
+          "Putting scanned pages saved as JPG or PNG into a single document",
+          "Collecting phone photos of handwritten notes or a whiteboard into one file",
+        ],
+      },
+      {
+        id: "limitations",
+        heading: "Limitations",
+        items: [
+          "Each image must be 50 MB or smaller.",
+          "All pages share one page size and orientation. You can't set them per image.",
+          "The page number at the bottom of each page can't be turned off.",
+          "Text in your images stays part of the picture. It is not selectable or searchable in the PDF.",
+          "Images aren't shrunk or compressed, so a PDF made from large photos is a large file, and WebP images can grow when converted to PNG.",
+          "JPG photos keep any camera metadata they contain, which can include the GPS location where the photo was taken. If you don't want to share it, remove it with your photo app before adding the photo.",
+          "Many or very large images need more memory and can be slow, especially on phones.",
+        ],
+      },
+      {
+        id: "troubleshooting",
+        heading: "Troubleshooting",
+        subsections: [
+          {
+            heading: "\"Unsupported file type.\"",
+            text: "Only JPG, PNG, and WebP images are accepted. Save or export the image in one of those formats, then add it again.",
+          },
+          {
+            heading: "\"File too large. Max 50 MB.\"",
+            text: "Resize the image or export it at a smaller size in your photo app, then add it again.",
+          },
+          {
+            heading: "A photo appears sideways in the PDF",
+            text: {
+              text: "Phones often save photos sideways with a rotation setting that photo apps follow. For JPG photos, the PDF follows that setting too, so pages match the thumbnails. If a photo is still sideways, the image itself is stored that way, so the thumbnail will look sideways too. Rotate it in your photo app and save a copy before adding it, or fix the page afterwards with Rotate PDF.",
+              links: [{ text: "Rotate PDF", href: "/rotate" }],
+            },
+          },
+          {
+            heading: "The pages are in the wrong order",
+            text: "Drag the thumbnails, or use the arrow buttons under each one, before you select Convert to PDF. The PDF uses the order shown by the numbers on the thumbnails. If you change the order after converting, select Convert to PDF again to make a new file.",
+          },
+          {
+            heading: "The thumbnail looks cropped",
+            text: "Thumbnails are cropped to squares to fit the grid. The PDF page shows the whole image.",
+          },
+          {
+            heading: "An image looks blurry",
+            text: "Small images are enlarged to fill the page and can look soft. Use the largest version of the image you have, or increase the margin so it is shown smaller.",
+          },
+          {
+            heading: "The PDF is too large to send",
+            text: {
+              text: "Use smaller images, or run the finished file through Compress PDF.",
+              links: [{ text: "Compress PDF", href: "/compress" }],
+            },
+          },
+        ],
+      },
     ],
     faqs: [
       {
-        q: "Can I add multiple images?",
-        a: "Yes. Add several images and they become pages in the output PDF.",
+        q: "Can I combine multiple images into one PDF?",
+        a: "Yes. Add several images and each one becomes a page in a single PDF, in the order shown by the numbers on the thumbnails.",
+      },
+      {
+        q: "Are my images uploaded to a server?",
+        a: "No. The PDF is created by JavaScript running in your browser, so your images stay on your device.",
+      },
+      {
+        q: "Does converting reduce image quality?",
+        a: "No. JPG images are placed in the PDF without being re-compressed, and PNG images are stored without loss. WebP images are converted to PNG, which keeps their quality but can make the PDF larger than the original WebP files.",
+      },
+      {
+        q: "Can I convert HEIC photos from an iPhone?",
+        a: "Not directly. HEIC files are not accepted, so export or share the photos as JPG first, then add them.",
       },
       {
         q: "Does it add anything to my pages?",
         a: "Yes. A small page number (for example, \"1 / 3\") is printed at the bottom of each page.",
       },
       {
-        q: "Can I choose the page size and orientation?",
-        a: "Yes. Choose A4, Letter, or a custom size in millimetres, switch between portrait and landscape, and set the page margin before you generate the PDF. Each image can be up to 50 MB.",
-      },
-      {
-        q: "Does converting reduce image quality?",
-        a: "No. JPG and PNG images are placed in the PDF as they are, without being re-compressed. WebP images are first converted to PNG, which keeps their quality but can make the PDF noticeably larger than the original WebP files.",
-      },
-      {
-        q: "How are images placed on each page?",
-        a: "Each image gets its own page. It is scaled to fit inside the margins, kept in proportion, and centred, so it is never cropped or stretched. Small images are enlarged to fill the space and can look soft, so use the largest version of an image you have, or increase the margin to keep it smaller on the page.",
+        q: "Can I turn the PDF back into images?",
+        a: "Yes. Use PDF to Image to save each page as a PNG or JPG file.",
       },
     ],
-    related: ["pdf-to-image", "word-to-pdf", "compress"],
+    related: ["pdf-to-image", "merge", "compress"],
   },
   "word-to-pdf": {
     slug: "word-to-pdf",

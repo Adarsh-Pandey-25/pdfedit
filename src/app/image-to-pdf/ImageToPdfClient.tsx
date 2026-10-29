@@ -1,8 +1,8 @@
 "use client";
 
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import toast from "react-hot-toast";
-import { GripVertical, Trash2 } from "lucide-react";
+import { ArrowLeft, ArrowRight, GripVertical, Trash2 } from "lucide-react";
 import { FileUploader } from "@/components/shared/FileUploader";
 import { ProcessingOverlay } from "@/components/shared/ProcessingOverlay";
 import { DownloadButton } from "@/components/shared/DownloadButton";
@@ -29,7 +29,28 @@ export function ImageToPdfClient() {
   const [progress, setProgress] = useState(0);
   const [result, setResult] = useState<Blob | null>(null);
   const [dragId, setDragId] = useState<string | null>(null);
+  const [announcement, setAnnouncement] = useState("");
+  const pendingFocus = useRef<{ id: string; delta: -1 | 1 } | null>(null);
   const confetti = useConfetti();
+
+  // Any change to the list or its order makes an earlier PDF out of date.
+  useEffect(() => {
+    setResult(null);
+  }, [items]);
+
+  // Keep keyboard focus on the moved image: if its button just became
+  // disabled (it reached the first or last place), use the other one.
+  useEffect(() => {
+    const target = pendingFocus.current;
+    if (!target) return;
+    pendingFocus.current = null;
+    const button = (delta: number) =>
+      document.querySelector<HTMLButtonElement>(
+        `[data-move="${target.id}"][data-delta="${delta}"]`
+      );
+    const same = button(target.delta);
+    (same && !same.disabled ? same : button(-target.delta))?.focus();
+  }, [items]);
 
   const onFiles = useCallback(async (files: File[]) => {
     const next = files.map((file) => ({
@@ -48,6 +69,19 @@ export function ImageToPdfClient() {
       if (item) URL.revokeObjectURL(item.url);
       return prev.filter((i) => i.id !== id);
     });
+  };
+
+  const move = (id: string, delta: -1 | 1) => {
+    const from = items.findIndex((i) => i.id === id);
+    const to = from + delta;
+    if (from < 0 || to < 0 || to >= items.length) return;
+    const next = [...items];
+    [next[from], next[to]] = [next[to], next[from]];
+    pendingFocus.current = { id, delta };
+    setItems(next);
+    setAnnouncement(
+      `Image ${from + 1} (${items[from].file.name}) moved to position ${to + 1} of ${items.length}`
+    );
   };
 
   const convert = async () => {
@@ -146,8 +180,9 @@ export function ImageToPdfClient() {
             {pageSize === "custom" && (
               <div className="grid grid-cols-2 gap-2">
                 <div>
-                  <Label>Width</Label>
+                  <Label htmlFor="cw">Width (mm)</Label>
                   <Input
+                    id="cw"
                     type="number"
                     className="mt-1.5"
                     value={customW}
@@ -155,8 +190,9 @@ export function ImageToPdfClient() {
                   />
                 </div>
                 <div>
-                  <Label>Height</Label>
+                  <Label htmlFor="ch">Height (mm)</Label>
                   <Input
+                    id="ch"
                     type="number"
                     className="mt-1.5"
                     value={customH}
@@ -168,7 +204,9 @@ export function ImageToPdfClient() {
           </div>
 
           <div className="flex flex-wrap gap-2 justify-between">
-            <p className="text-sm text-text-secondary">Drag to reorder</p>
+            <p className="text-sm text-text-secondary">
+              Drag or use the arrows to reorder
+            </p>
             <div className="flex gap-2">
               <Button
                 variant="outline"
@@ -211,7 +249,7 @@ export function ImageToPdfClient() {
                   type="button"
                   className="absolute top-2 right-2 p-1 rounded-lg bg-bg-card/80"
                   onClick={() => remove(item.id)}
-                  aria-label="Remove"
+                  aria-label={`Remove image ${idx + 1} (${item.file.name})`}
                 >
                   <Trash2 className="h-4 w-4" />
                 </button>
@@ -224,9 +262,42 @@ export function ImageToPdfClient() {
                 <p className="text-xs mt-1 truncate text-center">
                   #{idx + 1} {item.file.name}
                 </p>
+                <div className="mt-1 flex justify-center gap-1">
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="icon"
+                    className="h-9 w-9"
+                    onClick={() => move(item.id, -1)}
+                    disabled={idx === 0}
+                    data-move={item.id}
+                    data-delta={-1}
+                    aria-label={`Move image ${idx + 1} (${item.file.name}) earlier`}
+                    title="Move earlier"
+                  >
+                    <ArrowLeft className="h-4 w-4" aria-hidden />
+                  </Button>
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="icon"
+                    className="h-9 w-9"
+                    onClick={() => move(item.id, 1)}
+                    disabled={idx === items.length - 1}
+                    data-move={item.id}
+                    data-delta={1}
+                    aria-label={`Move image ${idx + 1} (${item.file.name}) later`}
+                    title="Move later"
+                  >
+                    <ArrowRight className="h-4 w-4" aria-hidden />
+                  </Button>
+                </div>
               </li>
             ))}
           </ul>
+          <p className="sr-only" aria-live="polite">
+            {announcement}
+          </p>
         </div>
       )}
 
