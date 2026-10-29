@@ -93,35 +93,40 @@ export const TOOL_SEO: Record<ToolSlug, ToolSeoContent> = {
   },
   merge: {
     slug: "merge",
-    title: "Merge PDF Files Online Free",
+    title: "Merge PDF – Combine PDF Files Online for Free",
     description:
-      "Merge multiple PDF files into one document online for free. Drag and drop to reorder files. No signup, private browser processing.",
+      "Combine PDF files online for free. Add two or more PDFs, drag them into order, and merge them into one document in your browser. No signup needed.",
     keywords: ["merge pdf", "combine pdf", "join pdf", "pdf merger", "merge pdf free"],
     h1: "Merge PDF Files Online Free",
     intro:
-      "Combine multiple PDF files into a single document with PdfEdit+’s free PDF merger. Upload several PDFs, drag to reorder, and download one merged file. Processing happens in your browser — nothing is uploaded to our servers. Perfect for reports, contracts, portfolios, and multi-document packets.",
+      "Combine multiple PDF files into one document with PdfEdit+, a free online PDF merge tool. Add two or more PDFs, drag them into the order you want, and download a single merged file. The files are combined in your browser, so they aren’t uploaded to a server. Useful for reports, contracts, portfolios, and application packets.",
     howToTitle: "How to Merge PDFs",
     steps: [
-      "Upload two or more PDF files.",
+      "Add two or more PDF files (up to 50 MB each).",
       "Drag the files to set the order you want.",
-      "Click merge to combine them into one PDF.",
-      "Download your merged document instantly.",
+      "Select Merge All to combine them into one PDF.",
+      "Select Download merged PDF to save the file.",
     ],
     featuresTitle: "Merge PDF Features",
     features: [
-      "Combine unlimited PDFs in one session (within file size limits)",
+      "Combine two or more PDFs at once (up to 50 MB each)",
       "Drag-and-drop reordering before merge",
-      "Fast local processing with no signup",
+      "Preview or remove any file before merging",
+      "Runs in your browser, with no signup",
       "Keeps page content and layout from each source file",
     ],
     faqs: [
       {
         q: "How many PDFs can I merge?",
-        a: "You can merge multiple PDFs in one go. Keep each file within the size limit for best performance.",
+        a: "There is no set limit on the number of files, but each PDF must be 50 MB or smaller. Many or very large files need more memory and can be slow, especially on phones.",
       },
       {
         q: "Will page order be preserved?",
         a: "Yes. Files are merged in the order you arrange them in the list.",
+      },
+      {
+        q: "Can I merge password-protected PDFs?",
+        a: "Not reliably. Pages from a password-protected PDF can come out blank. If you have permission, remove the protection first, for example with Unlock PDF if you know the password, then merge the unlocked copy. Unlocking doesn't work with every protected PDF, and Unlock PDF rebuilds pages as images, so their text can't be selected.",
       },
     ],
     related: ["split", "compress", "page-numbers"],
@@ -159,23 +164,24 @@ export const TOOL_SEO: Record<ToolSlug, ToolSeoContent> = {
   },
   compress: {
     slug: "compress",
-    title: "Compress PDF Online Free",
+    title: "Compress PDF Online Free – PDF Compression Tool",
     description:
-      "Compress PDF files online to reduce size without signup. Fast, private browser compression for email and sharing.",
+      "Compress PDF files online for free with a simple PDF compression tool. Choose Low, Medium, or High compression and see how much smaller the file gets.",
     keywords: ["compress pdf", "reduce pdf size", "pdf compressor", "optimize pdf"],
     h1: "Compress PDF Online Free",
     intro:
-      "Reduce PDF file size for email, uploads, and sharing with PdfEdit+’s free PDF compressor. Choose a quality level that balances clarity and size. Compression runs locally in your browser so your documents stay private.",
+      "Reduce PDF file size for email, uploads, and sharing with PdfEdit+, a free online PDF compression tool. Choose Low, Medium, or High compression, then compare the new file size with the original before you download. Compression runs in your browser, so your PDF isn’t uploaded to a server.",
     howToTitle: "How to Compress a PDF",
     steps: [
-      "Upload your PDF file.",
-      "Choose a compression level that fits your needs.",
-      "Run compression and review the new file size.",
-      "Download the optimized PDF.",
+      "Drop a PDF into the upload area or choose one from your device (up to 50 MB).",
+      "Choose Low, Medium, or High compression.",
+      "Select Compress PDF and check how much smaller the new file is.",
+      "Download the compressed PDF, or keep your original if it didn’t get smaller.",
     ],
     featuresTitle: "Compress PDF Features",
     features: [
-      "Multiple quality / size tradeoffs",
+      "Three compression levels: Low, Medium, and High",
+      "Shows how much smaller (or larger) the new file is before you download",
       "Works entirely in your browser",
       "Great for email attachments and uploads",
       "Free with no account required",
@@ -188,6 +194,14 @@ export const TOOL_SEO: Record<ToolSlug, ToolSeoContent> = {
       {
         q: "Will text stay selectable after compression?",
         a: "No. Because pages are converted to images, text, links, and form fields in the compressed copy are no longer selectable or searchable. Text-only PDFs may not get smaller, so keep your original file.",
+      },
+      {
+        q: "Which compression level should I choose?",
+        a: "Start with Medium. Low keeps pages sharper but saves less space. High makes the smallest files, but text and pictures look softer, so check the result before you share it.",
+      },
+      {
+        q: "Why is my compressed PDF larger than the original?",
+        a: "Compression turns every page into an image, so PDFs that are mostly text or already compressed can come out larger. The tool tells you when this happens; keep your original file in that case.",
       },
     ],
     related: ["merge", "pdf-to-image", "protect"],
