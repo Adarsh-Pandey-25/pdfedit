@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { getTool, type ToolSlug } from "@/lib/constants";
-import { getToolSeo, type SeoRichText } from "@/lib/seo-content";
+import { getToolSeo, type FaqItem, type SeoRichText } from "@/lib/seo-content";
 import {
   BreadcrumbSchema,
   FAQSchema,
@@ -9,6 +9,23 @@ import {
 import { SITE_URL } from "@/lib/constants";
 import { GUIDES } from "@/lib/guides";
 import { A } from "@/components/guides/GuideProse";
+
+/**
+ * FAQ answer text, with `faq.link.text` (if present in the answer) as a link.
+ * The plain `faq.a` string is what the FAQ structured data uses, so the
+ * visible words and the JSON-LD stay identical.
+ */
+function FaqAnswer({ faq }: { faq: FaqItem }) {
+  const at = faq.link ? faq.a.indexOf(faq.link.text) : -1;
+  if (!faq.link || at < 0) return <>{faq.a}</>;
+  return (
+    <>
+      {faq.a.slice(0, at)}
+      <A href={faq.link.href}>{faq.link.text}</A>
+      {faq.a.slice(at + faq.link.text.length)}
+    </>
+  );
+}
 
 /** Section text, with each `links[].text` (first occurrence) as a link. */
 function RichText({ value }: { value: SeoRichText }) {
@@ -152,7 +169,7 @@ export function ToolSeoContent({ slug }: { slug: ToolSlug }) {
                 </span>
               </summary>
               <p className="mt-2 text-sm text-text-secondary leading-relaxed pr-6">
-                {faq.a}
+                <FaqAnswer faq={faq} />
               </p>
             </details>
           ))}

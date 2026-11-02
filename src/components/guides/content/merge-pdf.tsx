@@ -154,6 +154,12 @@ export const mergePdfGuide: GuideContent = {
               searchable, and web links keep working.
             </li>
           </Bullets>
+          <p>
+            To page through the merged file in your browser, open it in the{" "}
+            <A href="/viewer">online PDF viewer</A>. It shows the page count,
+            and its text search works in PDFs that have a text layer. Links
+            aren’t clickable there, so test links in a PDF app.
+          </p>
           <p>Some things belong to a whole document rather than to its pages, and they are not carried over:</p>
           <Bullets>
             <li>

@@ -1,6 +1,11 @@
 import type { ToolSlug } from "@/lib/constants";
 
-export type FaqItem = { q: string; a: string };
+export type FaqItem = {
+  q: string;
+  a: string;
+  /** Optional: renders `text` (which must appear in `a`) as a link on tool pages. */
+  link?: { text: string; href: string };
+};
 
 /** Plain text, or text where each `links[].text` (which must appear in `text`) becomes a link. */
 export type SeoRichText =
@@ -576,36 +581,73 @@ export const TOOL_SEO: Record<ToolSlug, ToolSeoContent> = {
   },
   viewer: {
     slug: "viewer",
-    title: "PDF Viewer Online Free",
+    title: "PDF Reader Online",
     description:
-      "View and read PDF files online for free in your browser. Fast, private PDF viewer with no signup or uploads to our servers.",
-    keywords: ["pdf viewer", "read pdf online", "online pdf reader"],
-    h1: "Free Online PDF Viewer",
+      "Open and read PDF files online for free with page navigation, zoom controls, thumbnails, and text search. View your PDF directly in your browser.",
+    keywords: ["pdf reader online", "online pdf reader", "open pdf online", "pdf viewer online", "free pdf viewer", "read pdf online"],
+    h1: "PDF Reader Online",
     intro:
-      "Open and read PDFs instantly with PdfEdit+’s free online PDF viewer. Zoom, navigate pages, and review documents without installing a reader. Files are rendered locally for privacy.",
-    howToTitle: "How to View a PDF Online",
+      "Open and read PDF files directly in your browser with PdfEdit+. Navigate between pages, view page thumbnails, zoom in or out, and search the document for words and phrases when the PDF has a text layer. No software installation is required, and your PDF stays on your device.",
+    howToTitle: "How to Open and Read a PDF Online",
     steps: [
-      "Upload or open your PDF file.",
-      "Browse pages with the viewer controls.",
-      "Zoom in for detailed reading.",
-      "Close when finished — nothing was uploaded.",
+      "Choose a PDF from your device or drag it into the uploader.",
+      "Wait for the PDF to load in your browser.",
+      "Use Previous and Next to navigate through pages, or select a thumbnail.",
+      "Use Zoom In, Zoom Out, Fit Width, or Fit Page to adjust the document.",
+      "Enter a word or phrase in the search field and press Enter or click Search.",
     ],
-    featuresTitle: "PDF Viewer Features",
+    featuresTitle: "PDF Reader Features",
     features: [
-      "Fast in-browser rendering",
-      "Page navigation, zoom, and fit-to-width or fit-to-page",
-      "Works on desktop and mobile",
-      "Search for a word or phrase across all pages",
-      "Private local viewing",
+      "Open and read PDF files in your browser",
+      "Navigate through all pages using Previous and Next controls",
+      "View thumbnails for the first 40 pages",
+      "Zoom in, zoom out, and use Fit Width or Fit Page",
+      "Search for words and phrases in PDFs that have a text layer",
+      "Responsive layout for desktop and mobile",
+      "Files processed locally in your browser",
     ],
     faqs: [
       {
         q: "Do I need to install software?",
-        a: "No. The viewer runs in any modern web browser.",
+        a: "No. You can open and read a PDF using a modern web browser without installing a separate PDF reader.",
       },
       {
-        q: "Can I search for text and open long documents?",
-        a: "Yes. Search looks through every page and tells you which pages contain the text; scanned pages without a text layer can't be searched. For long files, the thumbnail sidebar shows the first 40 pages, and you can still move through every page with the next and previous buttons.",
+        q: "How do I open a PDF online?",
+        a: "Select a PDF file from your device or drag it into the uploader. The viewer loads the document in your browser.",
+      },
+      {
+        q: "Can I search for text in a PDF?",
+        a: "Yes. Enter a word or phrase to find pages containing it. Search works with PDFs that have a text layer. Scanned pages without a text layer cannot be searched.",
+      },
+      {
+        q: "Can I zoom in and out of a PDF?",
+        a: "Yes. Use Zoom In and Zoom Out, or choose Fit Width or Fit Page to adjust how the page appears.",
+      },
+      {
+        q: "Can I view all pages in a PDF?",
+        a: "Yes. You can navigate through all pages using the Previous and Next buttons. The thumbnail panel displays thumbnails for the first 40 pages.",
+      },
+      {
+        q: "Can I select or copy text from a PDF?",
+        a: "No. This viewer renders PDF pages on a canvas, so text cannot be selected or copied directly. Users who need to extract text can use the Extract Text tool.",
+        link: { text: "Extract Text", href: "/extract-text" },
+      },
+      {
+        q: "Can I open a password-protected PDF?",
+        a: "The viewer does not provide a password prompt. If a PDF requires a password to open, it cannot be opened directly in this viewer. Users who know the password can try the Unlock PDF tool, subject to its supported encryption types.",
+        link: { text: "Unlock PDF", href: "/unlock" },
+      },
+      {
+        q: "Can I click links inside a PDF?",
+        a: "No. Links inside a PDF are not clickable in this viewer.",
+      },
+      {
+        q: "Can I scroll continuously through the document?",
+        a: "No. The viewer displays one page at a time. Use Previous and Next or the page thumbnails to navigate.",
+      },
+      {
+        q: "Can I open a PDF from a web address, print it, or download it?",
+        a: "No. The viewer currently opens PDF files selected from your device. It does not provide URL-based opening, printing, or downloading controls.",
       },
     ],
     related: ["edit", "sign", "extract-text"],

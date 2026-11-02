@@ -155,8 +155,10 @@ export const splitPdfGuide: GuideContent = {
         <>
           <p>
             Open the new file and check the page count and the first and last
-            pages. Text stays selectable and searchable, and web links keep
-            working. These are not carried over:
+            pages. You can page through it in your browser with the{" "}
+            <A href="/viewer">online PDF viewer</A>. In the file itself, text
+            stays selectable and searchable, and web links keep working. These
+            are not carried over:
           </p>
           <Bullets>
             <li>

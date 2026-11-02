@@ -167,6 +167,11 @@ export const compressPdfGuide: GuideContent = {
             </li>
           </Bullets>
           <p>
+            You can look through the compressed file in your browser with the{" "}
+            <A href="/viewer">online PDF viewer</A>, which shows each page and
+            has zoom controls.
+          </p>
+          <p>
             Also remember what changes when pages become images. You can no
             longer select, copy, or search the text, and screen readers can’t
             read it. Links stop working, and fillable form fields are no
