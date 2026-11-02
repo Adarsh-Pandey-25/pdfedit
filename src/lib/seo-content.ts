@@ -110,6 +110,11 @@ export const TOOL_SEO: Record<ToolSlug, ToolSeoContent> = {
         q: "Will the text stay selectable?",
         a: "Choose Searchable Text to keep the original text layer. Save as PDF saves each page as an image, so its text can't be selected or searched.",
       },
+      {
+        q: "Can I edit a Word document here?",
+        a: "The editor opens PDF files only. To work on a Word document here, convert it with Word to PDF first, then open the PDF in the editor. The conversion keeps text, headings, and lists but not images, tables, or the original layout.",
+        link: { text: "Word to PDF", href: "/word-to-pdf" },
+      },
     ],
     related: ["sign", "watermark", "unlock"],
   },
@@ -149,6 +154,11 @@ export const TOOL_SEO: Record<ToolSlug, ToolSeoContent> = {
       {
         q: "Can I merge password-protected PDFs?",
         a: "Not reliably. Pages from a password-protected PDF can come out blank. If you have permission, remove the protection first, for example with Unlock PDF if you know the password, then merge the unlocked copy. Unlocking doesn't work with every protected PDF, and Unlock PDF rebuilds pages as images, so their text can't be selected.",
+      },
+      {
+        q: "Can I merge Word documents?",
+        a: "Not directly: Merge PDF combines PDF files only. Convert each document with Word to PDF first, then merge the PDFs. That conversion keeps text but not images, tables, or the original layout, so check each PDF before merging.",
+        link: { text: "Word to PDF", href: "/word-to-pdf" },
       },
     ],
     related: ["split", "compress", "page-numbers"],
@@ -403,29 +413,87 @@ export const TOOL_SEO: Record<ToolSlug, ToolSeoContent> = {
   },
   "word-to-pdf": {
     slug: "word-to-pdf",
-    title: "Word to PDF Converter Free",
+    title: "Free Word to PDF Converter: DOCX to PDF, No Upload",
     description:
-      "Convert Word .docx files to PDF online for free. Preview your document, choose a theme, and download an A4 PDF. Processed in your browser, no signup.",
-    keywords: ["word to pdf", "docx to pdf", "convert word", "office to pdf"],
-    h1: "Convert Word to PDF Online",
-    intro:
-      "Convert a Word .docx file into a clean PDF without installing anything. PdfEdit+ reads your document in your browser, shows a preview, and lets you pick a theme before it creates the PDF. Headings, paragraphs, lists, and bold and italic text are carried over. Images are left out, tables become plain text, and the original page layout is not kept. Your file is not uploaded to a server.",
-    howToTitle: "How to Convert Word to PDF",
-    steps: [
-      "Upload a .docx Word file by dragging it in or choosing it from your device.",
-      "Check the preview to see the text, headings, and lists read from your document.",
-      "Choose a theme (Modern, Professional, Minimal, or Colorful), then select Convert to PDF.",
-      "Download the finished PDF.",
+      "Free Word to PDF converter online. Convert DOCX to PDF in your browser with no upload or signup: preview your text, pick a theme, and download an A4 PDF.",
+    keywords: [
+      "word to pdf converter",
+      "docx to pdf converter",
+      "convert docx to pdf",
+      "convert word to pdf online",
+      "word to pdf converter online",
+      "word file to pdf",
     ],
-    featuresTitle: "Word to PDF Features",
+    h1: "Word to PDF Converter",
+    intro:
+      "PdfEdit+ is a free online Word to PDF converter that turns a .docx file into a clean, text-based A4 PDF. You can convert Word to PDF online without installing anything: your document is read and converted in your browser, so it is not uploaded to a server, and there is no signup. Headings, paragraphs, bullet and numbered lists, and bold and italic text are carried over, then styled with the theme you choose. Images are left out, tables become plain text, and the original page layout, fonts, and colors are not kept, so this converter works best for text documents such as essays, letters, notes, and simple reports.",
+    howToTitle: "How to Convert a Word File to PDF",
+    steps: [
+      "Choose a .docx file up to 50 MB by dragging it onto the upload box or selecting it from your device.",
+      "Check the preview to see the headings, paragraphs, and lists read from your document. Pictures can appear in the preview but are not added to the PDF.",
+      "Choose a theme (Modern, Professional, Minimal, or Colorful), then select Convert to PDF.",
+      "Download the PDF. It takes the name of your Word file, so report.docx becomes report.pdf.",
+    ],
+    featuresTitle: "Word to PDF Converter Features",
     features: [
-      "Reads .docx files in your browser (legacy .doc files are not accepted)",
+      "A DOCX to PDF converter that runs in your browser, so your document is not uploaded (legacy .doc files are not accepted)",
       "Preview of your document's content before you convert",
       "Four themes: Modern, Professional, Minimal, and Colorful",
       "Keeps headings, paragraphs, bullet and numbered lists, and bold and italic text",
+      "A4 pages with a \"Page 1 of 3\"-style footer on every page",
       "Handles accented letters and Greek text",
+      "Free, with no signup and no watermark",
+    ],
+    sections: [
+      {
+        id: "use-cases",
+        heading: "When to Use This Word to PDF Converter",
+        items: [
+          "Essays and assignments: send a PDF that looks the same on any device, instead of a .docx that depends on the reader's software.",
+          "Letters, notes, and simple reports that are mostly headings, paragraphs, and lists.",
+          "Simple CVs and cover letters. If your CV uses tables, columns, or a photo, check the preview first, because that layout is not kept.",
+          "Documents you would rather not upload, such as a draft contract or an HR letter, because the file is read on your device.",
+          "Converting on a laptop or computer that doesn't have MS Word installed.",
+          {
+            text: "Preparing a document to sign or combine: convert it here, then add your signature with Sign PDF or join it with other files using Merge PDF.",
+            links: [
+              { text: "Sign PDF", href: "/sign" },
+              { text: "Merge PDF", href: "/merge" },
+            ],
+          },
+        ],
+      },
+      {
+        id: "privacy",
+        heading: "Is This Online Word to PDF Converter Private?",
+        paragraphs: [
+          {
+            text: "Yes. The page loads the converter into your browser, and your Word document is read and turned into a PDF on your own device. The file is not sent to a server. You still need an internet connection to open the page and load the converter and its fonts. Read the privacy policy for details.",
+            links: [{ text: "privacy policy", href: "/privacy" }],
+          },
+        ],
+      },
+      {
+        id: "tips",
+        heading: "Tips for a Better DOCX to PDF Conversion",
+        items: [
+          "Format titles with Word's built-in Heading 1, Heading 2, and Heading 3 styles. Text that is only made larger or bold is converted as a normal paragraph.",
+          "If your file is in the older .doc format, open it in Word, choose Save As, and save it as a Word Document (.docx) first.",
+          "Check any table before you share the PDF: its text is kept but run together, without rows, columns, or borders.",
+          "Links keep their text but are not clickable in the PDF.",
+          "Emoji, and characters in scripts the PDF font does not include (such as Hindi and other Indian scripts), do not appear correctly in the PDF, even if they look right in the preview.",
+        ],
+      },
     ],
     faqs: [
+      {
+        q: "Is this Word to PDF converter free, and is there a file size limit?",
+        a: "Yes, it is free, with no signup, and no watermark is added to your PDF. Each .docx file can be up to 50 MB, and you convert one Word document at a time.",
+      },
+      {
+        q: "Is my Word document uploaded to a server?",
+        a: "No. The converter runs in your browser, so your .docx file is read and converted on your device and is not sent to a server. You need an internet connection only to load the page, the converter, and its fonts.",
+      },
       {
         q: "Does it support .doc files?",
         a: "No. The uploader accepts .docx files only, not legacy .doc files. In Word, choose Save As, pick Word Document (.docx), and upload the new file.",
@@ -440,7 +508,23 @@ export const TOOL_SEO: Record<ToolSlug, ToolSeoContent> = {
       },
       {
         q: "What does the finished PDF look like?",
-        a: "Pages are A4. The PDF starts with your file name as a title, followed by your content in the selected theme, and every page has a \"Page 1 of 3\"-style footer.",
+        a: "Pages are A4. The PDF starts with your file name as a title, followed by your content in the selected theme, and every page has a \"Page 1 of 3\"-style footer. The downloaded file takes the name of your Word document.",
+      },
+      {
+        q: "Why don't my headings show as headings in the PDF?",
+        a: "The converter recognizes headings that use Word's built-in Heading styles (Heading 1, Heading 2, and so on). Text that was only made larger or bold is treated as a normal paragraph. Apply a Heading style in Word, save, and convert again.",
+      },
+      {
+        q: "How do I save a Word file as PDF and keep the exact layout?",
+        a: "Export the PDF from the program that created the document. In Microsoft Word, choose File > Save As and pick PDF as the file type. In Google Docs, choose File > Download > PDF Document. Those exports keep the original layout. This converter is designed for text documents, where a clean and consistent look matters more than the original design.",
+      },
+      {
+        q: "Why does it say \"Could not read DOCX file\"?",
+        a: "The file could not be opened as a Word document. This happens when a .docx file is password-protected or damaged, or when it is really an older .doc file that was renamed. Remove the password in Word, or open the file and save it again as a Word Document (.docx), then try again.",
+      },
+      {
+        q: "Can I convert a Word document written in Hindi or another Indian language?",
+        a: "Not with this converter. The PDF uses a built-in font that covers English and other Latin-alphabet languages, Greek, and Cyrillic, but not Hindi, Tamil, Bengali, Telugu, Gujarati, Urdu, or other Indian scripts, so that text will not appear correctly in the PDF. Documents typed in legacy fonts such as Kruti Dev are also affected, because your fonts are not kept. The preview can look fine even when the PDF does not. For these documents, use File > Save As > PDF in Microsoft Word, which keeps your fonts.",
       },
     ],
     related: ["text-to-pdf", "image-to-pdf", "compress"],
@@ -751,7 +835,7 @@ export const TOOL_SEO: Record<ToolSlug, ToolSeoContent> = {
         a: "Requirements vary by jurisdiction and document type. PdfEdit+ provides the signing tools; consult local rules for legal validity.",
       },
     ],
-    related: ["edit", "protect", "watermark"],
+    related: ["edit", "protect", "word-to-pdf"],
   },
   "extract-text": {
     slug: "extract-text",
