@@ -755,35 +755,105 @@ export const TOOL_SEO: Record<ToolSlug, ToolSeoContent> = {
   },
   "extract-text": {
     slug: "extract-text",
-    title: "Extract Text from PDF – PDF to Text Free",
+    title: "PDF to Text (TXT) – Extract Text from PDF Free",
     description:
-      "Extract text from PDF online for free. Copy it, download a .txt file, or save a formatted PDF. Private browser extraction, no signup.",
-    keywords: ["extract text from pdf", "pdf to text", "copy pdf text", "pdf text extractor"],
+      "Convert PDF to text online for free. Extract text from every page, edit it, then copy it or download a TXT file. Runs in your browser, no signup.",
+    keywords: ["pdf to text", "extract text from pdf", "pdf to txt", "convert pdf to text", "copy text from pdf", "pdf text extractor"],
     h1: "Extract Text from PDF Online",
     intro:
-      "Pull selectable text out of PDF documents for notes, quotes, or reuse. PdfEdit+ extracts text in your browser and can optionally generate a clean downloadable PDF from the result — without uploading your file.",
+      "Convert a PDF to text in your browser. PdfEdit+ reads the text stored on every page, shows it in an editable box, and lets you copy it, download it as a TXT file, or save it as a new formatted PDF. It works with PDFs that contain real text, not scanned images. Your PDF is processed locally in your browser and isn't uploaded during extraction.",
     howToTitle: "How to Extract Text from a PDF",
     steps: [
-      "Upload your PDF.",
-      "The text is extracted automatically from every page.",
-      "Copy the text, download it as .txt, or save a formatted PDF.",
-      "Use the content wherever you need it.",
+      "Drop a PDF into the upload area, or select the upload area to choose one from your device. You can extract one PDF at a time, up to 50 MB.",
+      "The text on every page is extracted in your browser. Pages are separated by a blank line.",
+      "Check the text in the box and edit it if you need to.",
+      "Select Copy or Download .txt, or choose a theme and select Download PDF to save a formatted copy.",
     ],
-    featuresTitle: "Extract Text Features",
+    featuresTitle: "PDF to Text Features",
     features: [
-      "Fast client-side text extraction",
-      "Copy to clipboard support",
-      "Optional download as a styled PDF",
-      "Private local processing",
+      "Extracts the text stored on every page of a PDF",
+      "Edit the extracted text before you use it",
+      "Copy to the clipboard or download a UTF-8 .txt file",
+      "Save the text as a new formatted PDF in four themes",
+      "One PDF at a time, up to 50 MB",
+      "Processed locally in your browser; your PDF isn't uploaded",
+    ],
+    sections: [
+      {
+        id: "what-you-get",
+        heading: "What you get",
+        paragraphs: [
+          "The tool copies the text stored in the PDF, page by page. Text from the same page is joined into one block, and pages are separated by a blank line.",
+          "Line breaks, columns, and tables aren't kept, and images aren't included. The text follows the order in which it is stored in the PDF. In some multi-column layouts, that order may differ from the reading order.",
+          {
+            text: "Need a formatted document instead? Download PDF lays the text out on new pages in one of four themes (Modern, Professional, Minimal, or Colorful), using the same layout engine as Text to PDF.",
+            links: [{ text: "Text to PDF", href: "/text-to-pdf" }],
+          },
+        ],
+      },
+      {
+        id: "limitations",
+        heading: "Limitations",
+        items: [
+          "There's no OCR. Scanned pages that are only images have no text to extract.",
+          "PDFs that need a password to open can't be read, because the tool has no password prompt.",
+          "The formatted PDF supports Latin, Greek, and Cyrillic letters. Other characters, such as Chinese, Arabic, or Hindi, appear as \"?\" in it. Copy and the TXT file keep every character.",
+        ],
+      },
+      {
+        id: "troubleshooting",
+        heading: "Troubleshooting",
+        subsections: [
+          {
+            heading: "\"Could not extract text\"",
+            text: "The PDF may need a password to open, or it may be damaged. Check that it opens in another PDF app without a password.",
+          },
+          {
+            heading: "The text box is empty",
+            text: {
+              text: "The PDF has no text layer, which is usual for scanned documents and photos of pages. This tool can't read text from images. You can confirm it in the PDF viewer: its search finds nothing on pages without a text layer.",
+              links: [{ text: "PDF viewer", href: "/viewer" }],
+            },
+          },
+          {
+            heading: "Words run together or are in the wrong order",
+            text: "Line breaks aren't kept, and the text follows the order stored in the PDF, which may differ from the reading order. Edit the text in the box before you copy or download it.",
+          },
+          {
+            heading: "\"Clipboard access denied\"",
+            text: "Your browser blocked copying. Select the text in the box and copy it yourself, or use Download .txt.",
+          },
+        ],
+      },
     ],
     faqs: [
       {
+        q: "Can I convert a PDF to a TXT file?",
+        a: "Yes. After the text is extracted, select Download .txt to save it as a plain text file (UTF-8).",
+      },
+      {
         q: "Does it work on scanned PDFs?",
-        a: "Scanned pages without a text layer may return little or no text. Use OCR software first for image-only scans.",
+        a: "No. The tool reads the text stored in the PDF and doesn't do OCR, so pages that are only images return no text.",
       },
       {
         q: "Is the layout kept?",
-        a: "No. Text from each page is joined into one block, so line breaks, columns, and tables aren't preserved.",
+        a: "No. Text from each page is joined into one block, and pages are separated by a blank line, so line breaks, columns, and tables aren't preserved.",
+      },
+      {
+        q: "Can I edit the text before copying or downloading it?",
+        a: "Yes. The extracted text appears in an editable box, and Copy, Download .txt, and Download PDF all use your edited version.",
+      },
+      {
+        q: "Can I extract text from a password-protected PDF?",
+        a: "Not if the PDF needs a password to open. The tool has no password prompt, so it shows \"Could not extract text\" instead.",
+      },
+      {
+        q: "Which languages are supported?",
+        a: "Copy and Download .txt keep every character in the PDF's text. Download PDF supports Latin, Greek, and Cyrillic letters; other characters, such as Chinese, Arabic, or Hindi, appear as \"?\" in the formatted PDF.",
+      },
+      {
+        q: "Is my PDF uploaded to a server?",
+        a: "No. Text extraction runs locally in your browser, so your PDF isn't uploaded during extraction. The page still loads code from the internet, such as the library it uses to read PDFs.",
       },
     ],
     related: ["edit", "text-to-pdf", "viewer"],
