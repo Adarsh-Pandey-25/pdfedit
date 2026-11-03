@@ -122,43 +122,115 @@ export const TOOL_SEO: Record<ToolSlug, ToolSeoContent> = {
     slug: "merge",
     title: "Merge PDF – Combine PDF Files Online for Free",
     description:
-      "Combine PDF files online for free. Add two or more PDFs, drag them into order, and merge them into one document in your browser. No signup needed.",
-    keywords: ["merge pdf", "combine pdf", "join pdf", "pdf merger", "merge pdf free"],
+      "Merge PDF online for free. Combine two or more PDF files into one document in your browser, with no upload, no signup, and no limit on the number of files.",
+    keywords: [
+      "merge pdf online",
+      "pdf merge online",
+      "merge pdf files",
+      "pdf combiner",
+      "merge pdf online free",
+      "combine pdf files",
+    ],
     h1: "Merge PDF Files Online Free",
     intro:
-      "Combine multiple PDF files into one document with PdfEdit+, a free online PDF merge tool. Add two or more PDFs, drag them into the order you want, and download a single merged file. The files are combined in your browser, so they aren’t uploaded to a server. Useful for reports, contracts, portfolios, and application packets.",
-    howToTitle: "How to Merge PDFs",
+      "Merge PDF online with PdfEdit+, a free PDF combiner that joins two or more PDF files into one document. Add your files, drag them into the order you want, select Merge All, and download a single merged PDF. This online PDF merge tool runs in your browser, so your files aren’t uploaded to a server, and there is no signup.",
+    howToTitle: "How to Merge PDF Files into One",
     steps: [
-      "Add two or more PDF files (up to 50 MB each).",
-      "Drag the files to set the order you want.",
-      "Select Merge All to combine them into one PDF.",
-      "Select Download merged PDF to save the file.",
+      "Select or drop two or more PDF files (up to 50 MB each). You can add more files later; new files go to the end of the list.",
+      "Drag the cards into the order you want. Card #1 becomes the start of the merged PDF.",
+      "Optional: use the eye icon to check a file in a new tab, or the bin icon to remove it.",
+      "Select Merge All, then Download merged PDF. The file is saved as merged.pdf.",
     ],
     featuresTitle: "Merge PDF Features",
     features: [
-      "Combine two or more PDFs at once (up to 50 MB each)",
+      "Merge multiple PDF files into one (up to 50 MB each)",
+      "No set limit on the number of files",
+      "Numbered cards with a first-page preview of each file",
       "Drag-and-drop reordering before merge",
       "Preview or remove any file before merging",
-      "Runs in your browser, with no signup",
-      "Keeps page content and layout from each source file",
+      "Keeps text, web links, and each page's size and orientation",
+      "Free, with no signup and no watermark",
+    ],
+    sections: [
+      {
+        id: "use-cases",
+        heading: "When to Combine PDF Files",
+        items: [
+          "Job and college applications that ask for one upload: a cover letter, CV, and certificates in a single PDF.",
+          "A month of invoices or receipts collected into one file for your accountant.",
+          "Documents scanned in batches, where each batch was saved as a separate PDF.",
+          "Reports whose chapters were exported separately by different people.",
+        ],
+      },
+      {
+        id: "privacy",
+        heading: "Is This Online PDF Merge Tool Private?",
+        paragraphs: [
+          {
+            text: "Yes. Your PDFs are read and combined in your browser, on your own device, and are not uploaded to a server. You need an internet connection to open the page and load its PDF tools. Read the privacy policy for details.",
+            links: [{ text: "privacy policy", href: "/privacy" }],
+          },
+        ],
+      },
+      {
+        id: "tips",
+        heading: "Tips for Merging PDF Files",
+        items: [
+          "Check the numbers on the cards before you merge. When you select several files at once, your device decides the order they arrive in, and it isn’t always alphabetical.",
+          "If you merge the same kind of document often, number your files first, for example 01-cover.pdf and 02-report.pdf.",
+          "Rename merged.pdf to something descriptive before you share it.",
+          {
+            text: "Open the merged file in the PDF viewer and check the page count and the pages where one file ends and the next begins.",
+            links: [{ text: "PDF viewer", href: "/viewer" }],
+          },
+        ],
+      },
     ],
     faqs: [
       {
-        q: "How many PDFs can I merge?",
-        a: "There is no set limit on the number of files, but each PDF must be 50 MB or smaller. Many or very large files need more memory and can be slow, especially on phones.",
+        q: "How do I merge two PDF files into one?",
+        a: "Add both PDFs, drag them into the order you want, and select Merge All. All the pages of the first card come first, followed by all the pages of the second. The same steps work for three or more files.",
+      },
+      {
+        q: "How many PDFs can I merge for free?",
+        a: "There is no set limit on the number of files, and merging is free, with no signup, no daily limit, and no watermark. Each PDF must be 50 MB or smaller. Many or very large files need more memory and can be slow, especially on phones.",
       },
       {
         q: "Will page order be preserved?",
-        a: "Yes. Files are merged in the order you arrange them in the list.",
+        a: "Yes. Files are merged in the order you arrange them in the list, and the pages inside each file keep their original order.",
       },
       {
         q: "Can I merge password-protected PDFs?",
-        a: "Not reliably. Pages from a password-protected PDF can come out blank. If you have permission, remove the protection first, for example with Unlock PDF if you know the password, then merge the unlocked copy. Unlocking doesn't work with every protected PDF, and Unlock PDF rebuilds pages as images, so their text can't be selected.",
+        a: "Not reliably. Pages from a PDF that needs a password to open, or that has restrictions such as no copying, can come out blank in the merged file, even though the merge reports success. If you have permission, remove the protection first, for example with Unlock PDF if you know the password, then merge the unlocked copy. Unlocking doesn't work with every protected PDF, and Unlock PDF rebuilds pages as images, so their text can't be selected.",
+        link: { text: "Unlock PDF", href: "/unlock" },
       },
       {
         q: "Can I merge Word documents?",
         a: "Not directly: Merge PDF combines PDF files only. Convert each document with Word to PDF first, then merge the PDFs. That conversion keeps text but not images, tables, or the original layout, so check each PDF before merging.",
         link: { text: "Word to PDF", href: "/word-to-pdf" },
+      },
+      {
+        q: "Can I merge a PDF with JPG images?",
+        a: "Not directly: Merge PDF accepts PDF files only. Turn the images into a PDF with Image to PDF first, then merge that PDF with your other files.",
+        link: { text: "Image to PDF", href: "/image-to-pdf" },
+      },
+      {
+        q: "Can I merge only some pages of a PDF?",
+        a: "Merge PDF combines whole files. To use only some pages, first pull them out with Split PDF, then merge the pieces in the order you want.",
+        link: { text: "Split PDF", href: "/split" },
+      },
+      {
+        q: "Are bookmarks and fillable forms kept?",
+        a: "No. Bookmarks and document properties such as the title are not carried over. Form fields can still show on the page, but the form that makes them fillable is not kept. Text, web links, and each page's size and orientation are kept.",
+      },
+      {
+        q: "How do I make the merged PDF smaller?",
+        a: "The merged PDF is roughly the size of the original files added together, sometimes slightly smaller. If it contains scanned pages, Compress PDF can make it smaller.",
+        link: { text: "Compress PDF", href: "/compress" },
+      },
+      {
+        q: "What does \"could not be merged\" mean?",
+        a: "The message names the file that failed, followed by a technical reason. That file usually isn't a valid PDF or is damaged. Open it in a PDF viewer; if it opens, save or export it as a new PDF and try again. If any file fails, no merged PDF is created.",
       },
     ],
     related: ["split", "compress", "page-numbers"],
