@@ -122,7 +122,7 @@ export const TOOL_SEO: Record<ToolSlug, ToolSeoContent> = {
     slug: "merge",
     title: "Merge PDF – Combine PDF Files Online for Free",
     description:
-      "Merge PDF online for free. Combine two or more PDF files into one document in your browser, with no upload, no signup, and no limit on the number of files.",
+      "Merge PDF online for free. Combine two or more PDF files into one PDF in your browser, with no upload, no signup, and no set limit on the number of files.",
     keywords: [
       "merge pdf online",
       "pdf merge online",
@@ -134,7 +134,7 @@ export const TOOL_SEO: Record<ToolSlug, ToolSeoContent> = {
     h1: "Merge PDF Files Online Free",
     intro:
       "Merge PDF online with PdfEdit+, a free PDF combiner that joins two or more PDF files into one document. Add your files, drag them into the order you want, select Merge All, and download a single merged PDF. This online PDF merge tool runs in your browser, so your files aren’t uploaded to a server, and there is no signup.",
-    howToTitle: "How to Merge PDF Files into One",
+    howToTitle: "How to Merge Multiple PDF Files into One",
     steps: [
       "Select or drop two or more PDF files (up to 50 MB each). You can add more files later; new files go to the end of the list.",
       "Drag the cards into the order you want. Card #1 becomes the start of the merged PDF.",
@@ -188,8 +188,12 @@ export const TOOL_SEO: Record<ToolSlug, ToolSeoContent> = {
     ],
     faqs: [
       {
-        q: "How do I merge two PDF files into one?",
-        a: "Add both PDFs, drag them into the order you want, and select Merge All. All the pages of the first card come first, followed by all the pages of the second. The same steps work for three or more files.",
+        q: "How do I merge two PDF files into one PDF?",
+        a: "Add both PDFs, drag them into the order you want, and select Merge All. You get 2 PDFs in 1 PDF file: all the pages of the first card come first, followed by all the pages of the second. Merging doesn't put two pages side by side on one sheet; each page stays a separate page. To merge multiple PDFs to one file, add three or more and follow the same steps.",
+      },
+      {
+        q: "How do I merge different PDF files into one PDF?",
+        a: "Add the PDFs wherever they came from, such as scanned pages, exported reports, or downloaded statements, then put them in order and select Merge All. Files with different page sizes or orientations can be merged: each page keeps its own size and orientation, so pages aren't resized to match.",
       },
       {
         q: "How many PDFs can I merge for free?",
