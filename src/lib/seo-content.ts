@@ -268,13 +268,20 @@ export const TOOL_SEO: Record<ToolSlug, ToolSeoContent> = {
   },
   compress: {
     slug: "compress",
-    title: "Compress PDF Online Free – PDF Compression Tool",
+    title: "Compress PDF Online Free – PDF Compressor",
     description:
-      "Compress PDF files online for free with a simple PDF compression tool. Choose Low, Medium, or High compression and see how much smaller the file gets.",
-    keywords: ["compress pdf", "reduce pdf size", "pdf compressor", "optimize pdf"],
+      "Compress PDF online free and reduce PDF file size in your browser, with no upload. Choose Low, Medium, or High and check the new size before you download.",
+    keywords: [
+      "compress pdf",
+      "compress pdf online",
+      "reduce pdf size",
+      "pdf compressor",
+      "make pdf smaller",
+      "optimize pdf",
+    ],
     h1: "Compress PDF Online Free",
     intro:
-      "Reduce PDF file size for email, uploads, and sharing with PdfEdit+, a free online PDF compression tool. Choose Low, Medium, or High compression, then compare the new file size with the original before you download. Compression runs in your browser, so your PDF isn’t uploaded to a server.",
+      "Compress PDF files online with PdfEdit+, a free PDF compressor that makes scanned and image-heavy PDFs smaller for email, uploads, and sharing. Choose Low, Medium, or High compression, then compare the new file size with the original before you download. Compression runs in your browser, so your PDF isn’t uploaded to a server.",
     howToTitle: "How to Compress a PDF",
     steps: [
       "Drop a PDF into the upload area or choose one from your device (up to 50 MB).",
@@ -287,10 +294,40 @@ export const TOOL_SEO: Record<ToolSlug, ToolSeoContent> = {
       "Three compression levels: Low, Medium, and High",
       "Shows how much smaller (or larger) the new file is before you download",
       "Works entirely in your browser",
-      "Great for email attachments and uploads",
+      "Reduce PDF file size for scanned and image-heavy PDFs",
+      "One PDF at a time, up to 50 MB",
+      "Each page keeps its original size and orientation",
       "Free with no account required",
     ],
+    sections: [
+      {
+        id: "what-gets-smaller",
+        heading: "Which PDFs Get Smaller?",
+        paragraphs: ["How much smaller a PDF gets depends on what’s inside it."],
+        items: [
+          "Scanned documents, such as letters, forms, and certificates, usually shrink the most, because they’re already stored as large page images.",
+          "PDFs with many photos or graphics, such as brochures and slide decks, often shrink well at Medium or High.",
+          "Text-based PDFs exported from Word, Google Docs, or similar apps usually get larger, because each page becomes an image. The tool tells you when this happens, so you can keep your original.",
+        ],
+      },
+      {
+        id: "how-it-works",
+        heading: "How This PDF Compressor Works",
+        paragraphs: [
+          "Each page is redrawn as a JPEG image and saved into a new PDF. Low uses about 108 dots per inch at 85% JPEG quality, Medium about 86 dpi at 70%, and High about 65 dpi at 50%. Lower resolution and quality make the file smaller but the pages softer. The page count stays the same, and each page keeps its original size and orientation.",
+        ],
+      },
+    ],
     faqs: [
+      {
+        q: "How can I make a PDF smaller?",
+        a: "Add your PDF, choose a compression level, and select Compress PDF. It works in your web browser on a computer or phone, with nothing to install and no account. If the file is still too big, try High. If you still have the original document, many apps can save it as a smaller PDF while keeping the text selectable.",
+      },
+      {
+        q: "Can I compress a PDF to a specific size, such as 100 KB or 500 KB?",
+        a: "No. There’s no target-size setting, so the tool can’t guarantee a size such as 100 KB, 500 KB, or under 5 MB. The result depends on how many pages the PDF has and what’s on them. Try Medium, then High, and check the size shown before you download. If High is still too large, use Split PDF to send only the pages that are needed.",
+        link: { text: "Split PDF", href: "/split" },
+      },
       {
         q: "Will compression reduce quality?",
         a: "Yes, to some degree. Every level re-renders each page as a JPEG image; stronger levels use lower resolution and image quality. Pick the lightest level when fidelity matters most.",
@@ -306,6 +343,15 @@ export const TOOL_SEO: Record<ToolSlug, ToolSeoContent> = {
       {
         q: "Why is my compressed PDF larger than the original?",
         a: "Compression turns every page into an image, so PDFs that are mostly text or already compressed can come out larger. The tool tells you when this happens; keep your original file in that case.",
+      },
+      {
+        q: "Can I compress a large PDF file?",
+        a: "Yes, up to 50 MB per file, one PDF at a time. Every page is processed on your device, so long PDFs take longer and need more memory, especially on phones.",
+      },
+      {
+        q: "Can I compress a password-protected PDF?",
+        a: "Not if it needs a password to open: compression fails. If you know the password, remove it with Unlock PDF first, then compress the unlocked copy.",
+        link: { text: "Unlock PDF", href: "/unlock" },
       },
     ],
     related: ["merge", "pdf-to-image", "protect"],
