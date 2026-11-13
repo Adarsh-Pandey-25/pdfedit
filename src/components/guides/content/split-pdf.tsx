@@ -171,9 +171,10 @@ export const splitPdfGuide: GuideContent = {
               <strong>Document properties</strong> such as the title.
             </li>
           </Bullets>
-          <Note title="Password-protected or restricted PDFs come out blank" tone="warning">
+          <Note title="PDFs requiring an open password won’t load; restricted PDFs may come out blank" tone="warning">
             <p>
-              If the PDF needs a password to open, or has restrictions such
+              If the PDF needs a password to open, it won’t load, and you’ll
+              see “Invalid PDF file”. If it has restrictions such
               as “no editing”, the thumbnails can look normal while the
               extracted pages come out blank, without an error message.
               Remove the protection first with <A href="/unlock">Unlock PDF</A>,
