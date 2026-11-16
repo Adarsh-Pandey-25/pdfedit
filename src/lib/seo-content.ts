@@ -315,10 +315,14 @@ export const TOOL_SEO: Record<ToolSlug, ToolSeoContent> = {
       "pdf compressor",
       "make pdf smaller",
       "optimize pdf",
+      "compress pdf file",
+      "decrease pdf size",
+      "pdf file compressor",
+      "how to reduce pdf file size",
     ],
     h1: "Compress PDF Online Free",
     intro:
-      "Compress PDF files online with PdfEdit+, a free PDF compressor that makes scanned and image-heavy PDFs smaller for email, uploads, and sharing. Choose Low, Medium, or High compression, then compare the new file size with the original before you download. Compression runs in your browser, so your PDF isn’t uploaded to a server.",
+      "Compress PDF files online with PdfEdit+, a free PDF file compressor that reduces PDF size for scanned and image-heavy PDFs, so they’re easier to email, upload, and share. Choose Low, Medium, or High compression, then compare the new file size with the original before you download. Compression runs in your browser, so your PDF isn’t uploaded to a server.",
     howToTitle: "How to Compress a PDF",
     steps: [
       "Drop a PDF into the upload area or choose one from your device (up to 50 MB).",
@@ -358,7 +362,11 @@ export const TOOL_SEO: Record<ToolSlug, ToolSeoContent> = {
     faqs: [
       {
         q: "How can I make a PDF smaller?",
-        a: "Add your PDF, choose a compression level, and select Compress PDF. It works in your web browser on a computer or phone, with nothing to install and no account. If the file is still too big, try High. If you still have the original document, many apps can save it as a smaller PDF while keeping the text selectable.",
+        a: "Add your PDF, choose a compression level, and select Compress PDF. It works in your web browser, with nothing to install and no account. If the file is still too big, try High. If you still have the original document, many apps can save it as a smaller PDF while keeping the text selectable.",
+      },
+      {
+        q: "How do I reduce PDF file size?",
+        a: "Choose a compression level and select Compress PDF. Start with Medium. To decrease PDF size further, try High, but pages will look softer. Check the new size before you download: scanned and image-heavy PDFs usually shrink the most, while text-only PDFs may not get smaller.",
       },
       {
         q: "Can I compress a PDF to a specific size, such as 100 KB or 500 KB?",
